@@ -1,0 +1,13 @@
+import { Canvas } from '@storybook/blocks'
+import { SourceCode } from '../../../src/components/source-code'
+
+import * as Stories from './augmenting-the-public-interface.stories'
+import cardComponentCode from '../../../../../packages/weavr-react-components/src/components/card-weave-augment-props.tsx?raw'
+
+# Advanced - Augmenting The Public Interface
+
+<SourceCode code={cardComponentCode} regionNames={['parts']} />
+
+<SourceCode code={cardComponentCode} regionNames={['component']} />
+
+<Canvas of={Stories.CardStory} />

@@ -1,0 +1,29 @@
+import { Canvas } from '@storybook/blocks'
+import { SourceCode } from '../../../src/components/source-code'
+
+import * as Stories from './read-and-modify-state.stories'
+import cardComponentCode from '../../../../../packages/weavr-react-components/src/components/card-weave-state.tsx?raw'
+
+# Advanced - Read and Modify State
+
+Internal state is an integral part of many ui components.
+To make components truly flexible it's necessary to grant component users access to this state.
+This can be achieved through facilitating weavr's `.bindState()` function.
+
+> Note that `bindState()` in it's current form has been designed to work
+> with react state hooks exclusively.
+> Support for other state management libraries is planned for later.
+
+## Example
+
+Let's start by introducing some state into our `Card` component.
+I'd prefer the overlay to stayed open / closed after the user clicked on it
+, as opposed to opening and closing on `:hover`.
+
+<SourceCode code={cardComponentCode} regionNames={['component']} />
+
+And here is the result of our modifications
+
+<Canvas of={Stories.CardStory} />
+
+- [Next Up: Advanced - Swapping Parts](?path=/docs/react-advanced-component-modification-swapping-parts--docs)

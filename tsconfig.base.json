@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": false,
+    "incremental": true,
+    "jsx": "react-jsx",
+    "tsBuildInfoFile": "${configDir}/.tsbuildinfo",
+    "outDir": "${configDir}/dist",
+    "paths": {
+      "~/*": ["${configDir}/src/*"]
+    }
+  },
+  "buildOptions": {
+    "incremental": true
+  },
+  "include": ["${configDir}/src"]
+}

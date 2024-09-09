@@ -1,0 +1,35 @@
+import { Canvas } from '@storybook/blocks'
+import { SourceCode } from '../../src/components/source-code'
+
+import * as Stories from './attaching-vs-overriding-props.stories'
+import cardComponentCode from '../../../../packages/weavr-react-components/src/components/card.tsx?raw'
+
+# Attaching vs. Overriding Props
+
+This section focuses on the most basic feature of weavr components -
+attaching and overriding props directly on site using the `$wvr` prop.
+We already got a brief look at it in the [Getting Started](?path=/docs/react-getting-started--docs#what-can-users-do-with-this) section.
+
+Click on the **Show code** button on the section below to view the code for the component on display.
+
+<Canvas of={Stories.ComponentSourceStory} />
+
+## Attach Props
+
+By using the `$wvr.attach` property you can assign properties to parts
+which aren't yet assigned by the component internally.
+This means you don't run the risk of accidentially overriding properties on parts which
+already fulfill a role - potentially breaking some part of the components functionality.
+
+<Canvas of={Stories.AttachPropsStory} />
+
+## Override Props
+
+The `$wvr.override` property does exactly what the name implies.
+It overrides any property you set regardless of what the target has assigned internally already.
+Make sure you know what exactly it is you're overriding here and what it's being used for already
+as carelessly overriding properties on a component's parts can easily lead to unexpected behavior.
+
+<Canvas of={Stories.OverridePropsStory} />
+
+- [Next Up: Generating Props for Element Collections](?path=/docs/react-generating-props-for-element-collections--docs)

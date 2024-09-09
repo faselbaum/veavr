@@ -1,0 +1,27 @@
+import { Canvas } from '@storybook/blocks'
+import { SourceCode } from '../../../src/components/source-code'
+
+import * as Stories from './read-and-modify-props.stories'
+import cardComponentCode from '../../../../../packages/weavr-react-components/src/components/card-weave-part-props.tsx?raw'
+
+# Advanced - Read and Modify Props
+
+Sometimes it's crucial to know, what props would get assigned by the component
+you're trying to modify before your modifications are applied.
+This is where the `.bindProps()` function comes in. It allows you to inspect
+the part props of your target component and conditionally apply your own props in return.
+
+## Example
+
+We're going to make the following modifications to the `Card` component:
+
+- When an image url is provided through the `img` prop, the card will always adopt the `medium` variant.
+- The overlay should always be expanded if the `variant` is `small`.
+
+<SourceCode code={cardComponentCode} regionNames={['component']} />
+
+And here is the result of our modifications
+
+<Canvas of={Stories.CardStory} />
+
+- [Next Up: Advanced - Read and Modify State](?path=/docs/react-advanced-component-modification-read-and-modify-state--docs)

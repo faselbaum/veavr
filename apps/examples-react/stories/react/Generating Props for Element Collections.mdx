@@ -1,0 +1,15 @@
+import { Canvas } from '@storybook/blocks'
+import { SourceCode } from '../../src/components/source-code'
+
+import * as Stories from './generating-props-for-element-collections.stories'
+import sliderWeavrCode from '../../../../packages/weavr-react-components/src/components/slider-weavr.tsx?raw'
+
+# Generating Props for Element Collections
+
+<SourceCode code={sliderWeavrCode} regionNames={['parts']} />
+
+<SourceCode code={sliderWeavrCode} regionNames={['component']} />
+
+<Canvas of={Stories.SliderWeavrStory} />
+
+- [Next Up: Advanced Component Modification](?path=/docs/react-advanced-component-modification-intro--docs)

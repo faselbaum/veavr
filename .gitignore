@@ -3,3 +3,4 @@ dist/
 .tsbuildinfo
 .wireit/
 *storybook.log
+.pnpm-store

@@ -2,7 +2,7 @@
   "name": "workspace",
   "private": true,
   "scripts": {
-    "ci:publish": "pnpm run -r build && pnpm publish -r",
+    "ci:publish": "pnpm run -r build && git log && git status && pnpm publish -r",
     "ci:version": "pnpm exec changeset version"
   },
   "devDependencies": {

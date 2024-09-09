@@ -1,8 +1,19 @@
 {
   "name": "@veavr/react",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "veavr, build flexible ui components",
+  "keywords": [
+    "react",
+    "customize",
+    "modify",
+    "micro framework",
+    "modding",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/faselbaum/veavr.git"
+  },
   "author": "https://github.com/faselbaum",
   "license": "MIT",
   "type": "module",

@@ -1,0 +1,69 @@
+{
+  "name": "@veavr/react-components",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "https://github.com/faselbaum",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "./dist/",
+    "./LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*",
+      "default": "./dist/*"
+    }
+  },
+  "scripts": {
+    "dev": "wireit",
+    "build": "wireit"
+  },
+  "dependencies": {
+    "vite": "^5.4.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite-tsconfig-paths": "^5.0.1",
+    "@emotion/styled": "^11.13.0",
+    "@emotion/react": "^11.13.0",
+    "emotion-reset": "^3.0.1",
+    "@veavr/react": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3"
+  },
+  "peerDependencies": {
+    "react": ">=17",
+    "@types/react": ">=17"
+  },
+  "wireit": {
+    "dev": {
+      "command": "pnpm run build --watch",
+      "dependencies": [
+        "build"
+      ],
+      "service": true
+    },
+    "build": {
+      "command": "tspc --build ./tsconfig.json",
+      "files": [
+        "./src/**/*",
+        "../../tsconfig.base.json",
+        "./tsconfig.json"
+      ],
+      "output": [
+        "./dist/**/*",
+        "./.tsbuildinfo"
+      ],
+      "dependencies": [
+        "../../packages/veavr-react:build"
+      ],
+      "clean": "if-file-deleted"
+    }
+  }
+}

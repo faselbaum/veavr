@@ -1,0 +1,71 @@
+{
+  "name": "@veavr/react",
+  "version": "1.0.0",
+  "description": "veavr, build flexible ui components",
+  "keywords": [
+    "react",
+    "customize",
+    "modify",
+    "micro framework",
+    "modding",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/faselbaum/veavr.git"
+  },
+  "author": "https://github.com/faselbaum",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "./dist/",
+    "./LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*",
+      "default": "./dist/*"
+    }
+  },
+  "scripts": {
+    "dev": "wireit",
+    "build": "wireit"
+  },
+  "dependencies": {
+    "ts-deepmerge": "^7.0.1",
+    "type-fest": "^4.25.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3"
+  },
+  "peerDependencies": {
+    "react": ">=17",
+    "@types/react": ">=17"
+  },
+  "wireit": {
+    "dev": {
+      "command": "pnpm run build --watch",
+      "dependencies": [
+        "build"
+      ],
+      "service": true
+    },
+    "build": {
+      "command": "tspc --build ./tsconfig.json",
+      "files": [
+        "./src/**/*",
+        "../../tsconfig.base.json",
+        "./tsconfig.json"
+      ],
+      "output": [
+        "./dist/**/*",
+        "./.tsbuildinfo"
+      ],
+      "clean": "if-file-deleted"
+    }
+  }
+}

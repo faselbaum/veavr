@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "unifiedjs.vscode-mdx",
+    "esbenp.prettier-vscode",
+    "styled-components.vscode-styled-components"
+  ]
+}

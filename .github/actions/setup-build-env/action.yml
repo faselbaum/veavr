@@ -1,0 +1,27 @@
+name: Setup Build Env
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+
+    - name: Setup PNPM
+      uses: pnpm/action-setup@v4
+
+    - name: Setup NodeJs
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: './package.json'
+        cache: 'pnpm'
+
+    - name: Install Dependencies
+      shell: bash
+      env:
+        CI: true
+      run: |
+        corepack enable
+        pnpm install
+
+    - name: Enable Wireit CI Cache
+      uses: google/wireit@setup-github-actions-caching/v2

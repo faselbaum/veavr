@@ -1,0 +1,57 @@
+{
+  "name": "examples-react",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@chromatic-com/storybook": "^1.6.1",
+    "@storybook/core": "^8.2.9",
+    "@storybook/addon-essentials": "^8.2.9",
+    "@storybook/addon-interactions": "^8.2.9",
+    "@storybook/addon-links": "^8.2.9",
+    "@storybook/blocks": "^8.2.9",
+    "@storybook/react": "^8.2.9",
+    "@storybook/react-vite": "^8.2.9",
+    "@storybook/test": "^8.2.9",
+    "prop-types": "^15.8.1",
+    "storybook": "^8.2.9",
+    "vite": "^5.4.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite-tsconfig-paths": "^5.0.1",
+    "@emotion/styled": "^11.13.0",
+    "@emotion/react": "^11.13.0",
+    "emotion-reset": "^3.0.1",
+    "@types/react": "^18.3.3",
+    "react": "^18.3.1",
+    "@veavr/react-components": "workspace:*",
+    "@veavr/react": "workspace:*"
+  },
+  "scripts": {
+    "dev": "wireit",
+    "build:storybook": "wireit"
+  },
+  "wireit": {
+    "dev": {
+      "command": "storybook dev -p 6006",
+      "dependencies": [
+        "../../packages/veavr-react-components:dev"
+      ],
+      "service": true
+    },
+    "build:storybook": {
+      "command": "storybook build",
+      "dependencies": [
+        "../../packages/veavr-react-components:build"
+      ],
+      "files": [
+        "./stories/**/*",
+        "./.storybook/**/*",
+        "../../tsconfig.base.json",
+        "./tsconfig.json",
+        "./vite.config.ts"
+      ],
+      "output": [
+        "./storybook-static"
+      ]
+    }
+  }
+}

@@ -1,0 +1,33 @@
+import { Canvas } from '@storybook/blocks'
+import { SourceCode } from '../../../src/components/source-code'
+
+import * as Stories from './swapping-parts.stories'
+import cardComponentCode from '../../../../../packages/veavr-react-components/src/components/card-veave-parts.tsx?raw'
+
+# Advanced - Swapping Parts
+
+veavr components allow you to swap out internal parts.
+This is useful if you need to insert new elements into the pre-existing markup structure,
+but it also allows you to hide or replace existing ones.
+
+> Note: The API is still fairly basic but with a few tricks you should still be able to cover almost every use case.
+
+## Example
+
+Last time we added some state to toggle the overlay of our card component.
+Let's continue there and modify the appearance of the overlay title a bit
+by adding an arrow icon right next to it. This arrow should serve as visual indicator to the user.
+
+Let's first prepare the part to swap out. We're going to replace the `Title` part with a custom component called `CustomTitle`.
+
+<SourceCode code={cardComponentCode} regionNames={['custom title']} />
+
+Alright. Now that we have our custom title prepared we are ready to plug it into the `Card` component.
+
+<SourceCode code={cardComponentCode} regionNames={['component']} />
+
+And here is the result of our modifications
+
+<Canvas of={Stories.CardStory} />
+
+- [Next Up: Advanced - Augmenting the Public Interface](?path=/docs/react-advanced-component-modification-augmenting-the-public-interface--docs)

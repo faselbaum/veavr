@@ -1,12 +1,17 @@
 {
   "name": "workspace",
   "private": true,
+  "scripts": {
+    "ci:publish": "pnpm run -r build && pnpm publish -r",
+    "ci:version": "pnpm exec changeset version"
+  },
   "devDependencies": {
     "typescript": "^5.5.3",
     "ts-patch": "^3.2.1",
     "prettier": "^3.3.2",
     "eslint": "^9.6.0",
-    "wireit": "^0.14.7"
+    "wireit": "^0.14.7",
+    "@changesets/cli": "^2.27.8"
   },
   "packageManager": "pnpm@9.4.0"
 }

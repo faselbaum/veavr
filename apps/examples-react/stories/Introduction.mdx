@@ -1,13 +1,13 @@
 # Introduction
 
-**weavr**, build flexible ui components.
+**veavr**, build flexible ui components.
 
-weavr is a library to help you build highly customizable ui components featuring
+veavr is a library to help you build highly customizable ui components featuring
 tight integration with TypeScript.
 
 ```
 The project is still in it's early stages and should be treated as experimental.
-As such weavr's API's and their documentation are not yet final.
+As such veavr's API's and their documentation are not yet final.
 You might encounter bugs or performance issues along the way.
 If you still feel like giving it a try you're welcome.
 
@@ -18,7 +18,7 @@ The library is currently available for:
 
 ## Features
 
-- Assign props to any deeply nested element of a weavr component directly within your render path.
+- Assign props to any deeply nested element of a veavr component directly within your render path.
 - Read and modify properties of any deeply nested element.
 - Replace any internally used part / component.
 - Read and modify internal component state.
@@ -29,17 +29,17 @@ To get started check out the respective guide for your ui library / framework.
 
 - [Getting Started with React](?path=/docs/react-getting-started--docs)
 
-## Why weavr? - Component Library Maintainers
+## Why veavr? - Component Library Maintainers
 
 As a component library maintainer it's often impossible to predict the environments and scenarios your components are being employed in.
 Sometimes there just simply might not be enough time or budget to really flesh out a component.
 This can easily lead to very restrictive component interfaces and leave your users waiting for much needed patches.
 
-Using weavr to build your components allows users to attach and override behavior which you didn't originally implement or plan for,
+Using veavr to build your components allows users to attach and override behavior which you didn't originally implement or plan for,
 giving them a proper escape hatch. It also helps you keep your component interfaces simple by removing the need to explicitly declare html standard attributes on your component.
-Weavr is designed to be as unintrusive as possible and makes heavy use of TypeScript's rich inference features to ensure you can focus on the implementation details.
+Veavr is designed to be as unintrusive as possible and makes heavy use of TypeScript's rich inference features to ensure you can focus on the implementation details.
 
-## Why weavr? - Component Library Users
+## Why veavr? - Component Library Users
 
 As a component library user you have probably found yourself at least once in a situation where you haven't
 been able to fully use a component because it was missing some simple features or attributes.
@@ -56,5 +56,5 @@ When such a situation arises there are few (less than optimal) options:
 
 None of those options are particulary great since they each come with their own major downsides.
 
-Components built with weavr let you modify their internals in various ways, providing you with a proper escape hatch for when you really need it.
+Components built with veavr let you modify their internals in various ways, providing you with a proper escape hatch for when you really need it.
 All while enjoying the safety benefits of TypeScript and supporting server side rendering.

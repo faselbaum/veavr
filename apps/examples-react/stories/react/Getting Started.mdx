@@ -3,22 +3,22 @@ import { SourceCode } from '../../src/components/source-code'
 
 import * as Stories from './getting-started.stories'
 
-import counterCode from '../../../../packages/weavr-react-components/src/components/counter.tsx?raw'
-import weavrCounterCode from '../../../../packages/weavr-react-components/src/components/counter-weavr.tsx?raw'
+import counterCode from '../../../../packages/veavr-react-components/src/components/counter.tsx?raw'
+import veavrCounterCode from '../../../../packages/veavr-react-components/src/components/counter-veavr.tsx?raw'
 
 # Getting Started
 
 1. [Installation](#installation)
 2. [Premise](#premise)
-3. [Writing Your First weavr Component](#writing-your-first-weavr-component)
+3. [Writing Your First veavr Component](#writing-your-first-veavr-component)
 4. [What Can Users Do With This?](#what-can-users-do-with-this)
 
 ## Installation
 
-To install **@weavr/react**, run
+To install **@veavr/react**, run
 
 ```bash
-npm install "@weavr/react" --save
+npm install "@veavr/react" --save
 ```
 
 ### Requirements
@@ -48,42 +48,42 @@ number input and putting our component users at a loss. There's also no `id`
 property passed to the input field making form labels unable to link to the
 field using the `for` attribute. Of course we could explicitly add these properties to
 our component - but this can quickly get inconsistent, especially with a large component library.
-Let's instead make use of weavr and be prepared for these sort of cases.
+Let's instead make use of veavr and be prepared for these sort of cases.
 
-> Note: weavr does not absolve you from properly implementing your components but it provides an escape hatch for consumers
+> Note: veavr does not absolve you from properly implementing your components but it provides an escape hatch for consumers
 > until an improved component version is released.
 
-## Writing Your First weavr Component
+## Writing Your First veavr Component
 
-Here is the same component, re-written using weavr.
+Here is the same component, re-written using veavr.
 
-<SourceCode code={weavrCounterCode} regionNames={['component']} />
+<SourceCode code={veavrCounterCode} regionNames={['component']} />
 
 As you can see it is quite a bit more code but don't let this discourage you as this enables an unprecedented amount of flexibility for this component.
 Let's go over the various sections in more detail.
 
 1. Define your component props as usual
 2. Declare and name the parts your component uses during rendering. Each part can either be a standard html tag name or any custom component type and can be replaced by consumers if needed.
-3. Use the `bindProps` function to assign props to elements. Without weavr this is usually done directly on the respective jsx nodes. Part props can be re-assigned by consumers if needed.
+3. Use the `bindProps` function to assign props to elements. Without veavr this is usually done directly on the respective jsx nodes. Part props can be re-assigned by consumers if needed.
 4. Define your render logic using the `bindNode` function. Here you reference the parts defined in step 2) and spread the props defined in step 3).
 
 ## What Can Users Do With This?
 
-Now that our Counter component is built with weavr, our users get access to the `$wvr` prop,
+Now that our Counter component is built with veavr, our users get access to the `$vvr` prop,
 which they can use to assign props to any of our internal parts.
 Since the component is clearly missing essential features let's try to patch those in using
-the `$wvr` prop. How about we add the missing keyboard functionality and make it possible for
+the `$vvr` prop. How about we add the missing keyboard functionality and make it possible for
 label elements to jump directly to the input by adding an id?
 
 <SourceCode
-  code={weavrCounterCode}
+  code={veavrCounterCode}
   regionNames={['usage']}
   includeImports={false}
 />
 
 Here's the result
 
-<Canvas of={Stories.CounterWeavrStory} sourceState="none" />
+<Canvas of={Stories.CounterVeavrStory} sourceState="none" />
 
 Now try clicking the label to focus the input field and use the up / down arrow keys.
 
@@ -93,7 +93,7 @@ our requirements. The best thing about this approach is that the properties we a
 didn't even have to be explicitly defined by the component author. We can attach
 or override any property of any part.
 
-This should give you a glimpse of what you can do with weavr. There are many more advanced use cases
+This should give you a glimpse of what you can do with veavr. There are many more advanced use cases
 which involve state, replacing parts or generating props for a collection of elements.
 Those topics will be covered on dedicated pages. You're welcome to explore.
 

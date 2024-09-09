@@ -1,18 +1,18 @@
 import { Meta, StoryFn } from '@storybook/react'
 
-import { Render } from '@weavr/react-components/components/slider-weavr.js'
+import { Render } from '@veavr/react-components/components/slider-veavr.js'
 
-import SliderWeavrSourceCode from '../../../../packages/weavr-react-components/src/components/slider-weavr.tsx?raw'
+import SliderVeavrSourceCode from '../../../../packages/veavr-react-components/src/components/slider-veavr.tsx?raw'
 import { getCodeFromRegions } from '~/src/components/source-code'
 
 export default {} satisfies Meta
 
-export const SliderWeavrStory: StoryFn = () => <Render />
-SliderWeavrStory.parameters = {
+export const SliderVeavrStory: StoryFn = () => <Render />
+SliderVeavrStory.parameters = {
   docs: {
     source: {
       code: getCodeFromRegions({
-        code: SliderWeavrSourceCode,
+        code: SliderVeavrSourceCode,
         regionNames: ['usage - render'],
         includeImports: false,
       }),

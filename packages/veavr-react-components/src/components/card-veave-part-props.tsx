@@ -6,14 +6,14 @@ import { Card as BaseCard } from './card.js'
 
 //#region component
 
-//           Card will be a new weavr component with our modifications
+//           Card will be a new veavr component with our modifications
 //           applying to all instances.
 //           |
-//           |              ˇ Call weave() on our weavr card component.
-export const Card = BaseCard.weave()({
-  component: ({ props, weavr }) => {
+//           |              ˇ Call veave() on our veavr card component.
+export const Card = BaseCard.veave()({
+  component: ({ props, veavr }) => {
     // ˇ using the `bindProps` function gives us access to the `baseAssignedProps` object.
-    return weavr.bindProps(({ baseAssignedProps }) => {
+    return veavr.bindProps(({ baseAssignedProps }) => {
       // ˇ custom logic for the variant
       const variant =
         typeof props.img === 'string'

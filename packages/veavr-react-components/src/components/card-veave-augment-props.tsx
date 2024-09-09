@@ -1,7 +1,7 @@
 //#region imports
 
 import styled from '@emotion/styled'
-import { Card as BaseCard } from './card-weave-parts.js'
+import { Card as BaseCard } from './card-veave-parts.js'
 import { Props as BaseProps } from './card/types.js'
 import * as BaseParts from './card/parts.js'
 import * as BasePartTypes from './card/parts.types.js'
@@ -36,14 +36,14 @@ export type CardProps = Omit<BaseProps, 'variant'> & {
   variant?: BaseProps['variant'] | 'large'
 }
 
-export const Card = BaseCard.weave<CardProps>()({
+export const Card = BaseCard.veave<CardProps>()({
   parts: { Root: CustomRoot },
   prepareProps: (props) => ({
     ...props,
     variant: props.variant === 'large' ? 'medium' : props.variant,
   }),
-  component: ({ props, weavr }) => {
-    return weavr.bindProps(({ baseAssignedProps }) => {
+  component: ({ props, veavr }) => {
+    return veavr.bindProps(({ baseAssignedProps }) => {
       // ˇ custom logic for the variant
       const variant =
         typeof props.img === 'string'

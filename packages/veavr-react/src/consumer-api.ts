@@ -3,11 +3,11 @@ import * as Shared from './shared.js'
 import * as ImplementerApi from './implementer-api.js'
 import * as DeepMerge from 'ts-deepmerge'
 
-//#region weavr
+//#region veavr
 
-export type WeavrFunctionArgs<
-  TParts extends Shared.WeavrPartsRegistry,
-  TImplementerFunction extends ImplementerApi.WeavrImplementerFunction<
+export type VeavrFunctionArgs<
+  TParts extends Shared.VeavrPartsRegistry,
+  TImplementerFunction extends ImplementerApi.VeavrImplementerFunction<
     TParts,
     any,
     any,
@@ -18,12 +18,12 @@ export type WeavrFunctionArgs<
   component: TImplementerFunction
 }
 
-export type WeaveFunctionArgs<
+export type VeaveFunctionArgs<
   TProps,
   TWovenProps,
-  TParts extends Shared.WeavrPartsRegistry,
-  TWovenParts extends Shared.WeavePartsRegistry<TParts> | undefined,
-  TImplementerFunction extends ImplementerApi.WeavrImplementerFunction<
+  TParts extends Shared.VeavrPartsRegistry,
+  TWovenParts extends Shared.VeavePartsRegistry<TParts> | undefined,
+  TImplementerFunction extends ImplementerApi.VeavrImplementerFunction<
     Shared.MergePartsRegistries<TParts, TWovenParts>,
     any,
     any,
@@ -40,8 +40,8 @@ export type WeaveFunctionArgs<
       prepareProps: (args: TWovenProps) => TProps
     })
 
-export type WeavrComponentProps<
-  TParts extends Shared.WeavrPartsRegistry,
+export type VeavrComponentProps<
+  TParts extends Shared.VeavrPartsRegistry,
   TComponentProps,
   TBoundProps extends {
     [P in keyof TParts]?:
@@ -63,17 +63,17 @@ export type WeavrComponentProps<
       : TypeFest.PartialDeep<React.ComponentProps<TParts[P]>>
   },
 > = TComponentProps & {
-  $wvr?: {
+  $vvr?: {
     attach?: VOverrides
     override?: VOverrides
   }
 }
 
 /**
- * WIP Type that's supposed to omit internally assigned props from the $wvr.attach interface
+ * WIP Type that's supposed to omit internally assigned props from the $vvr.attach interface
  */
-export type WeavrComponentPropsAssignedPropsExcluded<
-  TParts extends Shared.WeavrPartsRegistry,
+export type VeavrComponentPropsAssignedPropsExcluded<
+  TParts extends Shared.VeavrPartsRegistry,
   TComponentProps,
   TBoundProps extends {
     [P in keyof TParts]?:
@@ -81,7 +81,7 @@ export type WeavrComponentPropsAssignedPropsExcluded<
       | Shared.PropsGenerator<TParts[P], any>
   },
 > = TComponentProps & {
-  $wvr?: {
+  $vvr?: {
     attach?: {
       [P in keyof TParts]?: TBoundProps[P] extends Shared.PropsGenerator<
         TParts[P],
@@ -119,8 +119,8 @@ export type WeavrComponentPropsAssignedPropsExcluded<
   }
 }
 
-export type WeavrFunctionComponent<
-  TParts extends Shared.WeavrPartsRegistry,
+export type VeavrFunctionComponent<
+  TParts extends Shared.VeavrPartsRegistry,
   TProps,
   TLoom extends ImplementerApi.Loom<
     { state: any; assignedProps: any },
@@ -130,15 +130,15 @@ export type WeavrFunctionComponent<
   >,
 > = React.FunctionComponent<
   TProps &
-    WeavrComponentProps<
+    VeavrComponentProps<
       TParts,
       TProps,
       ReturnType<TLoom['binders']['partProps']>
     >
 > & {
-  weave: <TWovenProps = TProps>() => <
-    TWovenParts extends Shared.WeavePartsRegistry<TParts> | undefined,
-    TWeaveImplementerFunction extends ImplementerApi.WeavrImplementerFunction<
+  veave: <TWovenProps = TProps>() => <
+    TWovenParts extends Shared.VeavePartsRegistry<TParts> | undefined,
+    TVeaveImplementerFunction extends ImplementerApi.VeavrImplementerFunction<
       Shared.MergePartsRegistries<TParts, NoInfer<TWovenParts>>,
       NoInfer<TWovenProps>,
       ImplementerApi.Loom<
@@ -153,62 +153,62 @@ export type WeavrFunctionComponent<
       any
     >,
   >(
-    args: WeaveFunctionArgs<
+    args: VeaveFunctionArgs<
       TProps,
       NoInfer<TWovenProps>,
       TParts,
       TWovenParts,
-      TWeaveImplementerFunction
+      TVeaveImplementerFunction
     >
-  ) => WeavrFunctionComponent<
+  ) => VeavrFunctionComponent<
     Shared.MergePartsRegistries<TParts, NoInfer<TWovenParts>>,
     TWovenProps,
-    ReturnType<TWeaveImplementerFunction>
+    ReturnType<TVeaveImplementerFunction>
   >
 }
 
-export function weavr<TProps>() {
-  function weavrInner<
-    TParts extends Shared.WeavrPartsRegistry,
-    TImplementerFunction extends ImplementerApi.WeavrImplementerFunction<
+export function veavr<TProps>() {
+  function veavrInner<
+    TParts extends Shared.VeavrPartsRegistry,
+    TImplementerFunction extends ImplementerApi.VeavrImplementerFunction<
       TParts,
       TProps,
       ImplementerApi.Loom<undefined, TParts, {}, undefined>,
       any
     >,
   >(
-    args: WeavrFunctionArgs<TParts, TImplementerFunction>
-  ): WeavrFunctionComponent<TParts, TProps, ReturnType<TImplementerFunction>> {
-    function makeFunctionComponment<TParts extends Shared.WeavrPartsRegistry>(
-      weaves: (
-        | WeavrFunctionArgs<any, any>
-        | WeaveFunctionArgs<any, any, any, any, any>
+    args: VeavrFunctionArgs<TParts, TImplementerFunction>
+  ): VeavrFunctionComponent<TParts, TProps, ReturnType<TImplementerFunction>> {
+    function makeFunctionComponment<TParts extends Shared.VeavrPartsRegistry>(
+      veaves: (
+        | VeavrFunctionArgs<any, any>
+        | VeaveFunctionArgs<any, any, any, any, any>
       )[]
-    ): WeavrFunctionComponent<
+    ): VeavrFunctionComponent<
       TParts,
       TProps,
       ReturnType<TImplementerFunction>
     > {
-      const weavrFunctionComponent: WeavrFunctionComponent<
+      const veavrFunctionComponent: VeavrFunctionComponent<
         TParts,
         TProps,
         ReturnType<TImplementerFunction>
       > = (props) => {
-        const { $wvr, ...restProps } = props
-        const attachedProps: Record<PropertyKey, any> = $wvr?.attach ?? {}
-        const overriddenProps: Record<PropertyKey, any> = $wvr?.override ?? {}
-        const preparedProps = prepareProps(restProps, weaves)
+        const { $vvr, ...restProps } = props
+        const attachedProps: Record<PropertyKey, any> = $vvr?.attach ?? {}
+        const overriddenProps: Record<PropertyKey, any> = $vvr?.override ?? {}
+        const preparedProps = prepareProps(restProps, veaves)
 
         let loom: ImplementerApi.LoomClass<any, any, any, any> =
           new ImplementerApi.LoomClass()
-        let parts: Shared.WeavrPartsRegistry = {}
+        let parts: Shared.VeavrPartsRegistry = {}
 
-        for (let i = 0; i < weaves.length; i++) {
-          const weave = weaves[i]
+        for (let i = 0; i < veaves.length; i++) {
+          const veave = veaves[i]
 
-          parts = { ...parts, ...weave.parts }
-          loom = weave
-            .component({ props: preparedProps[i], weavr: loom })
+          parts = { ...parts, ...veave.parts }
+          loom = veave
+            .component({ props: preparedProps[i], veavr: loom })
             .extend()
         }
 
@@ -223,18 +223,18 @@ export function weavr<TProps>() {
 
         return loom.render(parts, state, mergedPartProps)
       }
-      weavrFunctionComponent.weave = () =>
-        ((weaveArgs: WeaveFunctionArgs<any, any, any, any, any>) => {
-          return makeFunctionComponment([...weaves, weaveArgs])
+      veavrFunctionComponent.veave = () =>
+        ((veaveArgs: VeaveFunctionArgs<any, any, any, any, any>) => {
+          return makeFunctionComponment([...veaves, veaveArgs])
         }) as any
 
-      return weavrFunctionComponent
+      return veavrFunctionComponent
     }
 
     return makeFunctionComponment([args])
   }
 
-  return weavrInner
+  return veavrInner
 }
 
 function mergePartProps(
@@ -300,26 +300,26 @@ function mergeGeneratorProps(
 
 function prepareProps(
   props: any,
-  weaves: (
-    | WeavrFunctionArgs<any, any>
-    | WeaveFunctionArgs<any, any, any, any, any>
+  veaves: (
+    | VeavrFunctionArgs<any, any>
+    | VeaveFunctionArgs<any, any, any, any, any>
   )[]
 ): unknown[] {
-  const result: unknown[] = Array.from(new Array(weaves.length))
-  result[weaves.length - 1] = props
+  const result: unknown[] = Array.from(new Array(veaves.length))
+  result[veaves.length - 1] = props
 
   let currentProps = props
 
-  for (let i = weaves.length - 1; i >= 0; i--) {
-    if (i === weaves.length - 1) {
+  for (let i = veaves.length - 1; i >= 0; i--) {
+    if (i === veaves.length - 1) {
       continue
     }
 
-    const weave = weaves[i + 1]
+    const veave = veaves[i + 1]
 
     const preparedProps =
-      'prepareProps' in weave && typeof weave['prepareProps'] === 'function'
-        ? weave['prepareProps'](currentProps)
+      'prepareProps' in veave && typeof veave['prepareProps'] === 'function'
+        ? veave['prepareProps'](currentProps)
         : currentProps
     currentProps = preparedProps
 
@@ -331,7 +331,7 @@ function prepareProps(
 
 //#endregion
 
-//#region weave
+//#region veave
 
 //#endregion
 

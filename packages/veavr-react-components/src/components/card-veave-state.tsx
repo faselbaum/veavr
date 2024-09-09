@@ -1,7 +1,7 @@
 //#region imports
 
 import * as React from 'react'
-import { Card as BaseCard } from './card-weave-part-props.js'
+import { Card as BaseCard } from './card-veave-part-props.js'
 
 //#endregion
 
@@ -13,12 +13,12 @@ export type State = {
   toggleOverlayState: () => void
 }
 
-export const Card = BaseCard.weave()({
-  component: ({ props, weavr }) => {
+export const Card = BaseCard.veave()({
+  component: ({ props, veavr }) => {
     const [$overlayState, $setOverlayState] =
       React.useState<State['$overlayState']>('closed')
 
-    return weavr
+    return veavr
       .bindState<State>(({ baseState }) => {
         return {
           $overlayState,

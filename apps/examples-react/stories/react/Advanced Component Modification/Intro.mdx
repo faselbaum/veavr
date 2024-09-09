@@ -2,18 +2,18 @@ import { Canvas } from '@storybook/blocks'
 import { SourceCode } from '../../../src/components/source-code'
 
 import * as Stories from './intro.stories'
-import cardComponentCode from '../../../../../packages/weavr-react-components/src/components/card.tsx?raw'
+import cardComponentCode from '../../../../../packages/veavr-react-components/src/components/card.tsx?raw'
 
 # Advanced Component Modification
 
 We covered the very simple use case of statically attaching or overriding props [here](?path=/docs/react-attaching-vs-overriding-props--docs).
-Now we'll take a look into weavr's more advanced features offered by the `.weave()` function which is exposed by any weavr component.
+Now we'll take a look into veavr's more advanced features offered by the `.veave()` function which is exposed by any veavr component.
 
-## The .weave() Function
+## The .veave() Function
 
-A weavr component's `.weave()` function is almost identical to the `weavr()`
-function that's being used to build and define a weavr component initially.
-It is used to extend a weavr component in a much more fine grained and controlled manner
+A veavr component's `.veave()` function is almost identical to the `veavr()`
+function that's being used to build and define a veavr component initially.
+It is used to extend a veavr component in a much more fine grained and controlled manner
 and create a new re-usable standalone component with modifications in place.
 
 ### What Can You Do With It?
@@ -24,7 +24,7 @@ and create a new re-usable standalone component with modifications in place.
 - Transform a components public interface.
 
 To showcase each of the mentioned features we will start with a basic
-weavr component and slowly **weave** features into it.
+veavr component and slowly **veave** features into it.
 Our starting point will be this very simple card component.
 
 <Canvas of={Stories.CardStory} />

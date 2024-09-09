@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { Meta, StoryFn } from '@storybook/react'
 
-import CardSourceCode from '../../../../packages/weavr-react-components/src/components/card.tsx?raw'
+import CardSourceCode from '../../../../packages/veavr-react-components/src/components/card.tsx?raw'
 
 import {
   Card,
   AttachProps,
   OverrideProps,
-} from '@weavr/react-components/components/card.js'
+} from '@veavr/react-components/components/card.js'
 import { getCodeFromRegions } from '~/src/components/source-code'
 
 export default {} satisfies Meta

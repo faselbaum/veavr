@@ -3,7 +3,7 @@ import * as TypeFest from 'type-fest'
 
 export interface ExtendFunction<TLoom extends Loom<any, any, any, any>> {
   (): TLoom
-  <TWovenParts extends Shared.WeavePartsRegistry<TLoom['parts']> | undefined>(
+  <TWovenParts extends Shared.VeavePartsRegistry<TLoom['parts']> | undefined>(
     parts?: TWovenParts
   ): Loom<
     {
@@ -48,7 +48,7 @@ export type Loom<
         assignedProps: unknown
       }
     | undefined,
-  TParts extends Shared.WeavrPartsRegistry,
+  TParts extends Shared.VeavrPartsRegistry,
   TState extends Record<PropertyKey, any>,
   TAssignedPartProps,
 > = {
@@ -79,7 +79,7 @@ export type Loom<
   ) => Loom<TBase, TParts, TState & IState, TAssignedPartProps>
   bindProps: <
     IAssignedPartProps extends Shared.PartPropsMap<
-      TParts extends Shared.WeavrPartsRegistry ? TParts : {},
+      TParts extends Shared.VeavrPartsRegistry ? TParts : {},
       TAssignedPartProps
     >,
   >(
@@ -93,7 +93,7 @@ export type Loom<
       parts: TParts
       state: State<TState>
       assignedProps: Shared.PartPropsMap<
-        TParts extends Shared.WeavrPartsRegistry ? TParts : {},
+        TParts extends Shared.VeavrPartsRegistry ? TParts : {},
         TAssignedPartProps
       > &
         TAssignedPartProps
@@ -102,8 +102,8 @@ export type Loom<
   extend: ExtendFunction<Loom<TBase, TParts, TState, TAssignedPartProps>>
 }
 
-export type WeavrImplementerFunctionArgs<
-  TParts extends Shared.WeavrPartsRegistry,
+export type VeavrImplementerFunctionArgs<
+  TParts extends Shared.VeavrPartsRegistry,
   TProps,
   TLoom extends Loom<
     { state: unknown; assignedProps: unknown },
@@ -113,11 +113,11 @@ export type WeavrImplementerFunctionArgs<
   >,
 > = {
   props: TProps
-  weavr: TLoom
+  veavr: TLoom
 }
 
-export type WeavrImplementerFunction<
-  TParts extends Shared.WeavrPartsRegistry,
+export type VeavrImplementerFunction<
+  TParts extends Shared.VeavrPartsRegistry,
   TProps,
   TInLoom extends Loom<any, TParts, any, any>,
   TReturn extends Loom<
@@ -129,7 +129,7 @@ export type WeavrImplementerFunction<
     any,
     any
   >,
-> = (args: WeavrImplementerFunctionArgs<TParts, TProps, TInLoom>) => TReturn
+> = (args: VeavrImplementerFunctionArgs<TParts, TProps, TInLoom>) => TReturn
 
 export class LoomClass<
   TBase extends
@@ -138,7 +138,7 @@ export class LoomClass<
         assignedProps: unknown
       }
     | undefined,
-  TParts extends Shared.WeavrPartsRegistry,
+  TParts extends Shared.VeavrPartsRegistry,
   TState extends Record<PropertyKey, any>,
   TAssignedPartProps,
 > implements Loom<TBase, TParts, TState, TAssignedPartProps>
@@ -181,7 +181,7 @@ export class LoomClass<
 
   bindProps: <
     IAssignedPartProps extends Shared.PartPropsMap<
-      TParts extends Shared.WeavrPartsRegistry ? TParts : {},
+      TParts extends Shared.VeavrPartsRegistry ? TParts : {},
       TAssignedPartProps
     >,
   >(
@@ -199,7 +199,7 @@ export class LoomClass<
       parts: TParts
       state: State<TState>
       assignedProps: Shared.PartPropsMap<
-        TParts extends Shared.WeavrPartsRegistry ? TParts : {},
+        TParts extends Shared.VeavrPartsRegistry ? TParts : {},
         TAssignedPartProps
       > &
         TAssignedPartProps

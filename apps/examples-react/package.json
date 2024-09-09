@@ -22,8 +22,8 @@
     "emotion-reset": "^3.0.1",
     "@types/react": "^18.3.3",
     "react": "^18.3.1",
-    "@weavr/react-components": "workspace:*",
-    "@weavr/react": "workspace:*"
+    "@veavr/react-components": "workspace:*",
+    "@veavr/react": "workspace:*"
   },
   "scripts": {
     "dev": "wireit",
@@ -33,14 +33,14 @@
     "dev": {
       "command": "storybook dev -p 6006",
       "dependencies": [
-        "../../packages/weavr-react-components:dev"
+        "../../packages/veavr-react-components:dev"
       ],
       "service": true
     },
     "build:storybook": {
       "command": "storybook build",
       "dependencies": [
-        "../../packages/weavr-react-components:build"
+        "../../packages/veavr-react-components:build"
       ],
       "files": [
         "./stories/**/*",

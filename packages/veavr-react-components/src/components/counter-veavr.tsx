@@ -1,7 +1,7 @@
 //#region imports
 
 import * as React from 'react'
-import { weavr } from '@weavr/react'
+import { veavr } from '@veavr/react'
 
 //#endregion
 
@@ -14,7 +14,7 @@ type CounterProps = {
 }
 
 //                          ˇ 1. your props type goes here
-export const Counter = weavr<CounterProps>()({
+export const Counter = veavr<CounterProps>()({
   // ˇ 2. give names to internaly used components
   parts: {
     Root: 'div',
@@ -22,9 +22,9 @@ export const Counter = weavr<CounterProps>()({
     IncreaseButton: 'button',
     DecreaseButton: 'button',
   },
-  component: ({ props, weavr }) => {
+  component: ({ props, veavr }) => {
     return (
-      weavr
+      veavr
         // ˇ 3. assign props to elements.
         .bindProps(() => ({
           Input: {
@@ -77,10 +77,10 @@ export const Application = () => {
         count={count}
         onIncrease={() => setCount(count + 1)}
         onDecrease={() => setCount(count - 1)}
-        // all weaver components have this special $wvr prop.
+        // all veaver components have this special $vvr prop.
         // it allows for simple assignment of values to props on component internal parts.
         // ˇ
-        $wvr={{
+        $vvr={{
           // note: there's also an `override` prop.
           // the difference will be showcased in other sections of the docs.
           // ˇ

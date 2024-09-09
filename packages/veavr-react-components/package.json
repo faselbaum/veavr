@@ -1,5 +1,5 @@
 {
-  "name": "@weavr/react-components",
+  "name": "@veavr/react-components",
   "private": true,
   "version": "1.0.0",
   "description": "",
@@ -32,7 +32,7 @@
     "@emotion/styled": "^11.13.0",
     "@emotion/react": "^11.13.0",
     "emotion-reset": "^3.0.1",
-    "@weavr/react": "workspace:*"
+    "@veavr/react": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.3.3"
@@ -61,7 +61,7 @@
         "./.tsbuildinfo"
       ],
       "dependencies": [
-        "../../packages/weavr-react:build"
+        "../../packages/veavr-react:build"
       ],
       "clean": "if-file-deleted"
     }

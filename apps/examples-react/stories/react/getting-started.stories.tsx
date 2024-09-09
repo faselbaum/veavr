@@ -1,10 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react'
 
-import CounterSourceCode from '../../../../packages/weavr-react-components/src/components/counter.tsx?raw'
-import CounterWeavrSourceCode from '../../../../packages/weavr-react-components/src/components/counter-weavr.tsx?raw'
+import CounterSourceCode from '../../../../packages/veavr-react-components/src/components/counter.tsx?raw'
+import CounterVeavrSourceCode from '../../../../packages/veavr-react-components/src/components/counter-veavr.tsx?raw'
 
-import * as Counter from '@weavr/react-components/components/counter.js'
-import * as CounterWeavr from '@weavr/react-components/components/counter-weavr.js'
+import * as Counter from '@veavr/react-components/components/counter.js'
+import * as CounterVeavr from '@veavr/react-components/components/counter-veavr.js'
 import { getCodeFromRegions } from '~/src/components/source-code'
 
 export default {} satisfies Meta
@@ -24,14 +24,14 @@ CounterStory.parameters = {
   },
 }
 
-export const CounterWeavrStory: StoryFn = () => {
-  return <CounterWeavr.Application />
+export const CounterVeavrStory: StoryFn = () => {
+  return <CounterVeavr.Application />
 }
-CounterWeavrStory.parameters = {
+CounterVeavrStory.parameters = {
   docs: {
     source: {
       code: getCodeFromRegions({
-        code: CounterWeavrSourceCode,
+        code: CounterVeavrSourceCode,
         regionNames: ['usage'],
         includeImports: false,
       }),

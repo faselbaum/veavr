@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Preview } from '@storybook/react'
 import { ThemeProvider, Global, css } from '@emotion/react'
 import emotionReset from 'emotion-reset'
-import { DefaultTheme } from '@weavr/react-components/theme.js'
+import { DefaultTheme } from '@veavr/react-components/theme.js'
 import { DocsContainer, Markdown } from '@storybook/blocks'
 import { StoryLayout } from '~/src/components/layout.js'
 
@@ -12,7 +12,7 @@ export default {
       <>
         <Global
           styles={css`
-            @layer weavr {
+            @layer veavr {
               ${emotionReset}
 
               *, *::after, *::before {
@@ -46,7 +46,7 @@ export default {
         
         */}
         <ThemeProvider theme={DefaultTheme}>
-          <StoryLayout className="weavr">{storyFn()}</StoryLayout>
+          <StoryLayout className="veavr">{storyFn()}</StoryLayout>
         </ThemeProvider>
       </>
     ),
@@ -63,10 +63,10 @@ export default {
             }}
           >
             <a
-              href="https://github.com/faselbaum/weavr"
+              href="https://github.com/faselbaum/veavr"
               style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
             >
-              <Markdown>View **weavr** on GitHub</Markdown>
+              <Markdown>View **veavr** on GitHub</Markdown>
               <img
                 style={{ width: '48px' }}
                 src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"

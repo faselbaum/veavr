@@ -1,7 +1,7 @@
 //#region Imports
 
 import * as React from 'react'
-import { weavr } from '@weavr/react'
+import { veavr } from '@veavr/react'
 
 import * as Parts from './card/parts.js'
 import * as Types from './card/types.js'
@@ -11,15 +11,15 @@ import * as Types from './card/types.js'
 export const commonProps: Types.Props = {
   img: 'https://picsum.photos/800/600',
   title: 'Awesome Card',
-  body: "I'm a weavr component ready to be customized.",
+  body: "I'm a veavr component ready to be customized.",
 }
 
 //#region component
 
-export const Card = weavr<Types.Props>()({
+export const Card = veavr<Types.Props>()({
   parts: Parts,
-  component: ({ props, weavr }) => {
-    return weavr
+  component: ({ props, veavr }) => {
+    return veavr
       .bindProps(() => ({
         Root: {
           imgUrl: props.img,
@@ -47,7 +47,7 @@ export const RenderCard = () => {
     <Card
       img="https://picsum.photos/800/600"
       title="Awesome Card"
-      body="I'm a weavr component ready to be customized."
+      body="I'm a veavr component ready to be customized."
     />
   )
 }
@@ -65,7 +65,7 @@ export const AttachProps = () => {
         img="https://picsum.photos/800/600"
         title="Click Me!"
         body={`You clicked me ${clicks} times`}
-        $wvr={{
+        $vvr={{
           attach: {
             Root: {
               onClick: () => setClicks(clicks + 1),
@@ -94,7 +94,7 @@ export const OverrideProps = () => {
         //                        image should still be intact,
         //                        even if we set it to undefined here
         //                        ˇ
-        $wvr={{ attach: { Root: { imgUrl: undefined } } }}
+        $vvr={{ attach: { Root: { imgUrl: undefined } } }}
       />
       <Card
         // ˇ img is set
@@ -104,7 +104,7 @@ export const OverrideProps = () => {
         //                        image is gone since the imgUrl prop,
         //                        of the Root part received a hard override
         //                        ˇ
-        $wvr={{ override: { Root: { imgUrl: undefined } } }}
+        $vvr={{ override: { Root: { imgUrl: undefined } } }}
       />
     </>
   )

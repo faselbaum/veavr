@@ -1,8 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react'
 
-import { RenderCard } from '@weavr/react-components/components/card-weave-state.js'
+import { RenderCard } from '@veavr/react-components/components/card-veave-state.js'
 
-import CardSourceCode from '../../../../../packages/weavr-react-components/src/components/card-weave-state.tsx?raw'
+import CardSourceCode from '../../../../../packages/veavr-react-components/src/components/card-veave-state.tsx?raw'
 import { getCodeFromRegions } from '~/src/components/source-code'
 
 export default {} satisfies Meta

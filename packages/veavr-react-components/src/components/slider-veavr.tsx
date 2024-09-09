@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import styled from '@emotion/styled'
-import { weavr } from '@weavr/react'
+import { veavr } from '@veavr/react'
 
 //#endregion
 
@@ -40,15 +40,15 @@ export const Parts = {
 
 //#region component
 
-export type WeavrSliderProps = {
+export type VeavrSliderProps = {
   imgUrls: string[]
   offset: number
 }
 
-export const WeavrSlider = weavr<WeavrSliderProps>()({
+export const VeavrSlider = veavr<VeavrSliderProps>()({
   parts: Parts,
-  component: ({ props, weavr }) => {
-    return weavr
+  component: ({ props, veavr }) => {
+    return veavr
       .bindProps(() => ({
         TranslateContainer: {
           style: {
@@ -93,14 +93,14 @@ export const Render = () => {
   return (
     <>
       <div style={{ width: '100%' }}>
-        <WeavrSlider imgUrls={imgUrls} offset={ticks} />
+        <VeavrSlider imgUrls={imgUrls} offset={ticks} />
         <p>Original</p>
       </div>
       <div style={{ width: '100%' }}>
-        <WeavrSlider
+        <VeavrSlider
           imgUrls={imgUrls}
           offset={ticks}
-          $wvr={{
+          $vvr={{
             override: {
               Slide: {
                 style: {
@@ -113,10 +113,10 @@ export const Render = () => {
         <p>Every slide is inverted</p>
       </div>
       <div style={{ width: '100%' }}>
-        <WeavrSlider
+        <VeavrSlider
           imgUrls={imgUrls}
           offset={ticks}
-          $wvr={{
+          $vvr={{
             override: {
               Slide: (_, index) => ({
                 style: {

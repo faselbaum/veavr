@@ -1,6 +1,6 @@
 //#region imports
 
-import { Card as BaseCard } from './card-weave-state.js'
+import { Card as BaseCard } from './card-veave-state.js'
 import * as BaseParts from './card/parts.js'
 import styled from '@emotion/styled'
 
@@ -63,12 +63,12 @@ export const CustomTitle: React.FunctionComponent<CustomTitleProps> = (
 
 //#region component
 
-export const Card = BaseCard.weave()({
+export const Card = BaseCard.veave()({
   parts: {
     Title: CustomTitle,
   },
-  component: ({ weavr }) => {
-    return weavr.bindProps(({ state, baseAssignedProps }) => ({
+  component: ({ veavr }) => {
+    return veavr.bindProps(({ state, baseAssignedProps }) => ({
       ...baseAssignedProps,
       Title: {
         iconDirection: state.$overlayState === 'closed' ? 'up' : 'down',

@@ -1,21 +1,21 @@
 import { HasRequiredKeys, ConditionalKeys } from 'type-fest'
 import { ToPath } from 'type-fest/source/get.js'
 
-export type WeavePartsRegistry<TBase extends WeavrPartsRegistry> = Partial<
+export type VeavePartsRegistry<TBase extends VeavrPartsRegistry> = Partial<
   Record<
     keyof TBase,
     React.ComponentType<any> | keyof React.JSX.IntrinsicElements
   >
 >
 
-export type WeavrPartsRegistry = Record<
+export type VeavrPartsRegistry = Record<
   PropertyKey,
   React.ComponentType<any> | keyof React.JSX.IntrinsicElements
 >
 
 export type MergePartsRegistries<
-  TParts extends WeavrPartsRegistry,
-  TWovenParts extends WeavePartsRegistry<TParts> | undefined,
+  TParts extends VeavrPartsRegistry,
+  TWovenParts extends VeavePartsRegistry<TParts> | undefined,
 > =
   Exclude<TWovenParts, undefined> extends never
     ? TParts
@@ -39,7 +39,7 @@ export type KeysOfPropsGenerators<T> = ConditionalKeys<
 >
 
 export type PartPropsMap<
-  TParts extends WeavrPartsRegistry,
+  TParts extends VeavrPartsRegistry,
   TAssignedPartProps,
 > = TAssignedPartProps extends undefined
   ? {

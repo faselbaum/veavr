@@ -7,6 +7,7 @@ const config = {
   semi: false,
   singleQuote: true,
   printWidth: 80,
+  proseWrap: 'never',
 }
 
 export default config

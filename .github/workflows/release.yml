@@ -14,6 +14,8 @@ jobs:
     secrets: inherit
 
   release:
+    needs:
+      - setup-build-env
     name: Release
     runs-on: ubuntu-latest
     steps:

@@ -27,6 +27,8 @@ jobs:
     secrets: inherit
 
   deploy:
+    needs:
+      - setup-build-env
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

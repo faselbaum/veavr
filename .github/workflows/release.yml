@@ -10,7 +10,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   setup-build-env:
-    uses: ./.github/workflows/lib/setup-build-env.yml
+    uses: ./.github/workflows/lib-setup-build-env.yml
     secrets: inherit
 
   release:

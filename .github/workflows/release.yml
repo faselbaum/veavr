@@ -8,32 +8,15 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
-env:
-  CI: true
-  PNPM_CACHE_FOLDER: .pnpm-store
-
 jobs:
+  setup-build-env:
+    uses: ./.github/workflows/lib/setup-build-env.yml
+    secrets: inherit
+
   release:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js 20.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.x
-
-      - name: Enable PNPM
-        run: corepack enable
-
-      - name: Setup PNPM Config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
-
-      - name: Install Dependencies
-        run: pnpm install
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1

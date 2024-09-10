@@ -1,0 +1,26 @@
+name: Setup Build Env
+
+on:
+  workflow_call:
+
+env:
+  CI: true
+
+jobs:
+  setup-build-env:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup NodeJs
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: './package.json'
+          cache: 'pnpm'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: pnpm install

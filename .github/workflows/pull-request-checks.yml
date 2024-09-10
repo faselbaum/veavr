@@ -1,0 +1,16 @@
+name: Pull Request Checks
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  pull-request-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Env
+        uses: faselbaum/veavr/.github/actions/setup-build-env@main
+
+      - name: Build
+        run: pnpm -r run build

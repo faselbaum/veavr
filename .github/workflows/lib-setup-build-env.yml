@@ -13,6 +13,9 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
       - name: Setup NodeJs
         uses: actions/setup-node@v4
         with:

@@ -8,7 +8,7 @@ import { StoryLayout } from '~/src/components/layout.js'
 
 export default {
   decorators: [
-    (storyFn) => (
+    (storyFn, context) => (
       <>
         <Global
           styles={css`
@@ -46,7 +46,9 @@ export default {
         
         */}
         <ThemeProvider theme={DefaultTheme}>
-          <StoryLayout className="veavr">{storyFn()}</StoryLayout>
+          <StoryLayout className="veavr" style={context.parameters.layout}>
+            {storyFn()}
+          </StoryLayout>
         </ThemeProvider>
       </>
     ),

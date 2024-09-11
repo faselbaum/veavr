@@ -6,10 +6,42 @@ import sliderVeavrCode from '../../../../packages/veavr-react-components/src/com
 
 # Generating Props for Element Collections
 
-<SourceCode code={sliderVeavrCode} regionNames={['parts']} />
+Often times we build components that generate a set of elements based on a collection of input parameters. In the realm of ui components those can be lists containing a set of list items, image sliders with a set of images or even entire tables full of cells.
+
+For this scenario veavr offers the concept of **props generator** functions which you can register for any named part inside the `bindProps()` function. This enables you to generate a set of props for each individual part instance created during rendering.
+
+## Example
+
+Let's take this simple image slider component for example. Here we generate a set of `<img>` elements for each url present in the `imgUrls` prop.
+
+<Canvas of={Stories.RenderOriginalStory} />
+
+## Implementation
+
+Let's take a look at how the slider is implemented.
 
 <SourceCode code={sliderVeavrCode} regionNames={['component']} />
 
-<Canvas of={Stories.SliderVeavrStory} />
+<Canvas of={Stories.SliderPartsStory} />
+
+## Consumer Side
+
+On the consumer side **props generators** are largely invisble. Attaching and overriding props on a part, which uses a props generator, works the same as for any statically created element - plus an additional option to more specifically target generated elements.
+
+### Static Props Enrichment
+
+When normally assigning a value to a property of any internal part using the `$vvr` property, those values will be uniformly attached to / overriden on all generated instances of that part.
+
+Here **every** `Slide` part will receive a style attribute which sets an inverted filter.
+
+<Canvas of={Stories.StaticOverrideStory} />
+
+### Conditional Props Enrichment
+
+If you want to target a specific element in a collection you can bind your own props generator function to the related part via the `$vvr` property. The way your resulting object merges with internally assigned props depends on whether you passed the function to the `attach` prop or the `override` prop.
+
+In this example we target **every second** `Slide` element to give it a nice pink hue.
+
+<Canvas of={Stories.ConditionalOverrideStory} />
 
 - [Next Up: Advanced Component Modification](?path=/docs/react-advanced-component-modification-intro--docs)

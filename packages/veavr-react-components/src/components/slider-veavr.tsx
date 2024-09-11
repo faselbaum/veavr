@@ -27,7 +27,7 @@ export const TranslateContainer = styled.div<{
 export const Root = styled.div`
   position: relative;
   overflow: hidden;
-  width: 100%;
+  max-width: 50%;
 `
 
 export const Parts = {
@@ -55,6 +55,11 @@ export const VeavrSlider = veavr<VeavrSliderProps>()({
             '--offset-x': (props.offset % props.imgUrls.length).toString(),
           },
         },
+        //   In this case the `Slide` entry is a props generator function
+        //   which receives the `imgUrl` and `index` for the current step
+        //   in the iteration. It can then return a props object for each
+        //   item separately.
+        //   ˇ
         Slide: (imgUrl: string, index: number) => ({
           src: imgUrl,
         }),
@@ -62,7 +67,19 @@ export const VeavrSlider = veavr<VeavrSliderProps>()({
       .bindNode(({ parts, assignedProps }) => (
         <parts.Root {...assignedProps.Root}>
           <parts.TranslateContainer {...assignedProps.TranslateContainer}>
+            {
+              // Here we iterate over the `props.imgUrls` array
+              // and map a `Slide` element to each item.
+              //           ˇ
+            }
             {props.imgUrls.map((imgUrl, index) => (
+              //                            We call the props generator function registered
+              //                            for the `Slide` part and provide it with the necessary
+              //                            parameters.
+              //                                  |
+              // Then we spread the resulting     |
+              // props to the individual `Slide`  |
+              // part.ˇ                           |
               <parts.Slide {...assignedProps.Slide(imgUrl, index)} />
             ))}
           </parts.TranslateContainer>
@@ -73,62 +90,78 @@ export const VeavrSlider = veavr<VeavrSliderProps>()({
 
 //#endregion
 
-//#region usage - render
-
-export const Render = () => {
+function useSliderState() {
   const [ticks, setTicks] = React.useState(0)
 
   React.useEffect(() => {
     window.setTimeout(() => setTicks(ticks + 1), 2000)
   }, [ticks])
 
-  const imgUrls = [
-    'https://picsum.photos/800/600?random=1',
-    'https://picsum.photos/800/600?random=2',
-    'https://picsum.photos/800/600?random=3',
-    'https://picsum.photos/800/600?random=4',
-    'https://picsum.photos/800/600?random=5',
-  ]
+  const imgUrls = Array.from(Array(6)).map(
+    (_, index) => `https://picsum.photos/800/600?random=${index}`
+  )
+
+  return { imgUrls, ticks }
+}
+
+//#region usage - render original
+
+export const RenderOriginal = () => {
+  const { imgUrls, ticks } = useSliderState()
+
+  return <VeavrSlider imgUrls={imgUrls} offset={ticks} />
+}
+
+//#endregion
+
+//#region usage - static override
+
+export const StaticOverride = () => {
+  const { imgUrls, ticks } = useSliderState()
 
   return (
-    <>
-      <div style={{ width: '100%' }}>
-        <VeavrSlider imgUrls={imgUrls} offset={ticks} />
-        <p>Original</p>
-      </div>
-      <div style={{ width: '100%' }}>
-        <VeavrSlider
-          imgUrls={imgUrls}
-          offset={ticks}
-          $vvr={{
-            override: {
-              Slide: {
-                style: {
-                  filter: 'invert(1)',
-                },
-              },
+    <VeavrSlider
+      imgUrls={imgUrls}
+      offset={ticks}
+      $vvr={{
+        override: {
+          Slide: {
+            style: {
+              filter: 'invert(1)',
             },
-          }}
-        />
-        <p>Every slide is inverted</p>
-      </div>
-      <div style={{ width: '100%' }}>
-        <VeavrSlider
-          imgUrls={imgUrls}
-          offset={ticks}
-          $vvr={{
-            override: {
-              Slide: (_, index) => ({
-                style: {
-                  filter: index % 2 !== 0 ? 'grayscale(1)' : undefined,
-                },
-              }),
+          },
+        },
+      }}
+    />
+  )
+}
+
+//#endregion
+
+//#region usage - conditional override
+
+export const ConditionalOverride = () => {
+  const { imgUrls, ticks } = useSliderState()
+
+  return (
+    <VeavrSlider
+      imgUrls={imgUrls}
+      offset={ticks}
+      $vvr={{
+        override: {
+          Slide: (_, index) => ({
+            style: {
+              opacity: index % 2 !== 0 ? 0.5 : 1,
             },
-          }}
-        />
-        <p>Every 2nd slide is grayscale</p>
-      </div>
-    </>
+          }),
+          Root: {
+            style: {
+              background: 'rgb(255, 0, 85)',
+            },
+          },
+        },
+      }}
+    />
   )
 }
 

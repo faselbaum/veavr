@@ -11,6 +11,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.27.8
         version: 2.27.8
+      bun:
+        specifier: ^1.1.27
+        version: 1.1.27
       eslint:
         specifier: ^9.6.0
         version: 9.10.0
@@ -71,6 +74,9 @@ importers:
       '@veavr/react-components':
         specifier: workspace:*
         version: link:../../packages/veavr-react-components
+      '@veavr/stackblitz-creator':
+        specifier: workspace:*
+        version: link:../../packages/veavr-stackblitz-creator
       '@vitejs/plugin-react':
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.3(@types/node@22.5.4))
@@ -139,6 +145,15 @@ importers:
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.5
+
+  packages/veavr-stackblitz-creator:
+    dependencies:
+      '@stackblitz/sdk':
+        specifier: ^1.11.0
+        version: 1.11.0
+      typescript:
+        specifier: ^5.5.3
+        version: 5.6.2
 
 packages:
 
@@ -1128,6 +1143,46 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
+  '@oven/bun-darwin-aarch64@1.1.27':
+    resolution: {integrity: sha512-h5Mf2+AESEtHHGRdSDQgDU7TY2vMPMeAuwkf/XPMDpaS+EoIUFayj1CXShB25gT16uw/ww/Pl3LaN0sN0tcWhQ==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@oven/bun-darwin-x64-baseline@1.1.27':
+    resolution: {integrity: sha512-Ld+FBW3VUzGOI9QhsQKnaiYinGcOQg83NpagoeyMASozFJEMyDEr/jxA5KxoSEJRChQrGZowq/7IfoPIcJZIUA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oven/bun-darwin-x64@1.1.27':
+    resolution: {integrity: sha512-l+uAcE0kh4+c2VUwKvSpsHFQbzR2eLxGKhONa4AJBNVW4UXIpSdH12Qj9fG4Xqgq7s26zs32jPsl2C2NQsmRag==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oven/bun-linux-aarch64@1.1.27':
+    resolution: {integrity: sha512-4oaNlx07SFxhO26Lm2cfRjozEQX/qRoWFhnz+EFLlGPUPLB2cNmXCVMtmXJep0u4Jub5pGK9yISwNT1voZ6KMg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@oven/bun-linux-x64-baseline@1.1.27':
+    resolution: {integrity: sha512-495DOwgzpr/0ta/AaSRYb7EJeAEAf38cBOUO6oJzCxT5NdWRbZeAo5bmqcrBke1AexnKPA7RUN9Z5+t1TvqjtQ==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-linux-x64@1.1.27':
+    resolution: {integrity: sha512-ktplW245+ke0GIKdBEzZisZ4mwAqdPYmW3RzhDPGB7193jVmaAE1YVUscrWkTAdfl6YMGb99IXThrhcXSddeAw==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-windows-x64-baseline@1.1.27':
+    resolution: {integrity: sha512-Qfn80kb9eDZaecCVVVxFpNfuHvo7h4yQlh278u9Vs0vSrHTYG4dxoH4SWkZSzHa44ZwKRpa1TmMfDVhX/HE+mA==}
+    cpu: [x64]
+    os: [win32]
+
+  '@oven/bun-windows-x64@1.1.27':
+    resolution: {integrity: sha512-LIZRqlyLpMEkmbsA+d/GmQnEdJzMGlFRlVtdQnyjTskW+uMv+lBHmWu7CkdcCCVPtf6wRDYgdkjpQOAw1wle5g==}
+    cpu: [x64]
+    os: [win32]
+
   '@rollup/pluginutils@5.1.0':
     resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==}
     engines: {node: '>=14.0.0'}
@@ -1223,6 +1278,9 @@ packages:
   '@sindresorhus/merge-streams@2.3.0':
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
     engines: {node: '>=18'}
+
+  '@stackblitz/sdk@1.11.0':
+    resolution: {integrity: sha512-DFQGANNkEZRzFk1/rDP6TcFdM82ycHE+zfl9C/M/jXlH68jiqHWHFMQURLELoD8koxvu/eW5uhg94NSAZlYrUQ==}
 
   '@storybook/addon-actions@8.2.9':
     resolution: {integrity: sha512-eh2teOqjga7aoClDVV+/b1gHJqsPwjiU1t+Hg/l4i2CkaBUNdYMEL90nR6fgReOdvvL5YhcPwJ8w38f9TrQcoQ==}
@@ -1720,6 +1778,11 @@ packages:
 
   buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
+
+  bun@1.1.27:
+    resolution: {integrity: sha512-FLnMaOuVVuhjPIfmlRtAE42B2x+oSWO6jW8MZ/Ss179qokN//nzIhuj/07bdA016U6d11HyLvvGb6eaH0HKhBQ==}
+    os: [darwin, linux, win32]
+    hasBin: true
 
   bytes@3.1.2:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
@@ -4811,6 +4874,30 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
+  '@oven/bun-darwin-aarch64@1.1.27':
+    optional: true
+
+  '@oven/bun-darwin-x64-baseline@1.1.27':
+    optional: true
+
+  '@oven/bun-darwin-x64@1.1.27':
+    optional: true
+
+  '@oven/bun-linux-aarch64@1.1.27':
+    optional: true
+
+  '@oven/bun-linux-x64-baseline@1.1.27':
+    optional: true
+
+  '@oven/bun-linux-x64@1.1.27':
+    optional: true
+
+  '@oven/bun-windows-x64-baseline@1.1.27':
+    optional: true
+
+  '@oven/bun-windows-x64@1.1.27':
+    optional: true
+
   '@rollup/pluginutils@5.1.0(rollup@4.21.2)':
     dependencies:
       '@types/estree': 1.0.5
@@ -4870,6 +4957,8 @@ snapshots:
   '@sinclair/typebox@0.27.8': {}
 
   '@sindresorhus/merge-streams@2.3.0': {}
+
+  '@stackblitz/sdk@1.11.0': {}
 
   '@storybook/addon-actions@8.2.9(storybook@8.2.9(@babel/preset-env@7.25.4(@babel/core@7.25.2)))':
     dependencies:
@@ -5533,6 +5622,17 @@ snapshots:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
+
+  bun@1.1.27:
+    optionalDependencies:
+      '@oven/bun-darwin-aarch64': 1.1.27
+      '@oven/bun-darwin-x64': 1.1.27
+      '@oven/bun-darwin-x64-baseline': 1.1.27
+      '@oven/bun-linux-aarch64': 1.1.27
+      '@oven/bun-linux-x64': 1.1.27
+      '@oven/bun-linux-x64-baseline': 1.1.27
+      '@oven/bun-windows-x64': 1.1.27
+      '@oven/bun-windows-x64-baseline': 1.1.27
 
   bytes@3.1.2: {}
 

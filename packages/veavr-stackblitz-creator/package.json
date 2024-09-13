@@ -1,19 +1,9 @@
 {
-  "name": "@veavr/react",
-  "version": "1.0.1",
-  "description": "veavr, build flexible ui components",
-  "keywords": [
-    "react",
-    "customize",
-    "modify",
-    "micro framework",
-    "modding",
-    "typescript"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/faselbaum/veavr.git"
-  },
+  "name": "@veavr/stackblitz-creator",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
   "author": "https://github.com/faselbaum",
   "license": "MIT",
   "type": "module",
@@ -21,8 +11,6 @@
     "./dist/",
     "./LICENSE"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -36,18 +24,12 @@
   },
   "scripts": {
     "dev": "wireit",
-    "build": "wireit"
+    "build": "wireit",
+    "cli": "bun ./src/resolve-dependencies.ts"
   },
   "dependencies": {
-    "ts-deepmerge": "^7.0.1",
-    "type-fest": "^4.25.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.3.3"
-  },
-  "peerDependencies": {
-    "react": ">=17",
-    "@types/react": ">=17"
+    "@stackblitz/sdk": "^1.11.0",
+    "typescript": "^5.5.3"
   },
   "wireit": {
     "dev": {

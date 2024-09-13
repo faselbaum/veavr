@@ -23,7 +23,8 @@
     "@types/react": "^18.3.3",
     "react": "^18.3.1",
     "@veavr/react-components": "workspace:*",
-    "@veavr/react": "workspace:*"
+    "@veavr/react": "workspace:*",
+    "@veavr/stackblitz-creator": "workspace:*"
   },
   "scripts": {
     "dev": "wireit",
@@ -33,7 +34,8 @@
     "dev": {
       "command": "storybook dev -p 6006",
       "dependencies": [
-        "../../packages/veavr-react-components:dev"
+        "../../packages/veavr-react-components:dev",
+        "../../packages/veavr-stackblitz-creator:dev"
       ],
       "service": true
     },

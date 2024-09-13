@@ -1,16 +1,19 @@
 import * as TypeScript from 'typescript'
-import * as Path from 'node:path'
-import * as Fs from 'node:fs'
+import * as NodePath from 'node:path'
+import * as NodeFs from 'node:fs'
+import * as TsConfigLoader from 'tsconfig-loader'
+import * as FindUp from 'find-up'
+import * as TypeFest from 'type-fest'
 
-const entryFilePath = Path.resolve(
+const entryFilePath = NodePath.resolve(
   '../veavr-react-components/src/components/card/usage-default.tsx'
 )
 
 const tsConfigFilePath = TypeScript.findConfigFile(entryFilePath, (path) =>
-  Fs.existsSync(path)
+  NodeFs.existsSync(path)
 )!
 
-console.log(Path.dirname(tsConfigFilePath))
+console.log(tsConfigFilePath)
 
 const parseConfigHost = {
   ...TypeScript.sys,
@@ -27,20 +30,48 @@ const program = TypeScript.createProgram({
   options: tsConfig.options,
   rootNames: [
     entryFilePath,
-    Path.resolve('../veavr-react-components/src/declarations/emotion.d.ts'),
+    NodePath.resolve('../veavr-react-components/src/declarations/emotion.d.ts'),
   ],
 })
 
-const sourceDir = Path.resolve('../veavr-react-components/src/')
-console.log(sourceDir)
+const requiredFiles = program
+  .getSourceFiles()
+  .filter(
+    (file) =>
+      !program.isSourceFileFromExternalLibrary(file) &&
+      !program.isSourceFileDefaultLibrary(file)
+  )
+  .map((file) =>
+    NodePath.relative(NodePath.dirname(tsConfigFilePath), file.fileName)
+  )
 
-console.log(
-  program
-    .getSourceFiles()
-    .filter(
-      (file) =>
-        !program.isSourceFileFromExternalLibrary(file) &&
-        !program.isSourceFileDefaultLibrary(file)
-    )
-    .map((file) => file.fileName)
+console.log(requiredFiles)
+
+const closestPackageJsonFilePath = FindUp.findUpSync('package.json', {
+  cwd: NodePath.dirname(tsConfigFilePath),
+})!
+console.log(closestPackageJsonFilePath)
+
+const packageJsonObject: TypeFest.PackageJson = JSON.parse(
+  NodeFs.readFileSync(closestPackageJsonFilePath).toString()
 )
+console.log(packageJsonObject)
+
+function getResolvedTsConfigJsonObject(
+  tsConfigPath: string
+): TsConfigLoader.Tsconfig {
+  const tsConfigObject = JSON.parse(
+    JSON.stringify(
+      TsConfigLoader.default({
+        cwd: NodePath.dirname(tsConfigFilePath),
+        filename: tsConfigFilePath,
+      })?.tsConfig
+    ).replaceAll('${configDir}', '.')
+  )
+  tsConfigObject.compilerOptions.baseUrl = '.'
+  delete tsConfigObject.extends
+
+  console.log(tsConfigObject)
+
+  return tsConfigObject
+}

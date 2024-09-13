@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "${configDir}/.",
+    "baseUrl": "${configDir}",
     "strict": true,
     "target": "ES2022",
     "module": "NodeNext",

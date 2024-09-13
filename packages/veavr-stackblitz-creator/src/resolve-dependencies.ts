@@ -4,20 +4,22 @@ import * as NodeFs from 'node:fs'
 import * as TsConfigLoader from 'tsconfig-loader'
 import * as FindUp from 'find-up'
 import * as TypeFest from 'type-fest'
+import * as TsDeepMerge from 'ts-deepmerge'
 
 const entryFilePath = NodePath.resolve(
   '../veavr-react-components/src/components/card/usage-default.tsx'
 )
 
-const tsConfigFilePath = TypeScript.findConfigFile(entryFilePath, (path) =>
-  NodeFs.existsSync(path)
+const tsConfigFilePath = TypeScript.findConfigFile(
+  entryFilePath,
+  TypeScript.sys.fileExists
 )!
 
 console.log(tsConfigFilePath)
 
 const parseConfigHost = {
   ...TypeScript.sys,
-  onUnRecoverableConfigFileDiagnostic: (diag) => {},
+  onUnRecoverableConfigFileDiagnostic: () => {},
 }
 
 const tsConfig = TypeScript.getParsedCommandLineOfConfigFile(
@@ -52,10 +54,39 @@ const closestPackageJsonFilePath = FindUp.findUpSync('package.json', {
 })!
 console.log(closestPackageJsonFilePath)
 
-const packageJsonObject: TypeFest.PackageJson = JSON.parse(
-  NodeFs.readFileSync(closestPackageJsonFilePath).toString()
+console.log(
+  createPackageJsonContent({
+    basePackageJsonFilePath: closestPackageJsonFilePath,
+  })
 )
-console.log(packageJsonObject)
+
+function createPackageJsonContent(options: {
+  basePackageJsonFilePath: string
+  overrides?: TypeFest.PackageJson.PackageJsonStandard
+}): TypeFest.PackageJson.PackageJsonStandard {
+  const basePackageJsonObject: TypeFest.PackageJson.PackageJsonStandard =
+    JSON.parse(NodeFs.readFileSync(options.basePackageJsonFilePath).toString())
+
+  const copyFields: (keyof TypeFest.PackageJson.PackageJsonStandard)[] = [
+    'type',
+    'dependencies',
+    'devDependencies',
+    'optionalDependencies',
+  ]
+
+  const trimmedBasePackageJsonObject = copyFields.reduce(
+    (acc, curr) => ({
+      ...acc,
+      [curr]: basePackageJsonObject[curr],
+    }),
+    {} as TypeFest.PackageJson.PackageJsonStandard
+  )
+
+  const packageJsonObject: TypeFest.PackageJson.PackageJsonStandard =
+    TsDeepMerge.merge(trimmedBasePackageJsonObject, options.overrides ?? {})
+
+  return packageJsonObject
+}
 
 function getResolvedTsConfigJsonObject(
   tsConfigPath: string

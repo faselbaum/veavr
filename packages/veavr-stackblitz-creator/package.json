@@ -25,14 +25,16 @@
   "scripts": {
     "dev": "wireit",
     "build": "wireit",
-    "cli": "bun ./src/resolve-dependencies.ts"
+    "cli": "tsx ./src/resolve-dependencies.ts"
   },
   "dependencies": {
     "@stackblitz/sdk": "^1.11.0",
     "typescript": "^5.5.3",
     "tsconfig-loader": "^1.1.0",
     "find-up": "^7.0.0",
-    "ts-deepmerge": "^7.0.1"
+    "ts-deepmerge": "^7.0.1",
+    "tar": "^7.4.3",
+    "glob": "^11.0.0"
   },
   "devDependencies": {
     "type-fest": "^4.25.0",

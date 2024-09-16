@@ -1,78 +1,133 @@
 import * as TypeScript from 'typescript'
 import * as NodePath from 'node:path'
 import * as NodeFs from 'node:fs'
-import * as NodeCrypto from 'node:crypto'
 import * as NodeChildProcess from 'node:child_process'
 import * as NodeModule from 'node:module'
-import * as TsConfigLoader from 'tsconfig-loader'
+import TsConfigLoader from 'tsconfig-loader'
 import * as FindUp from 'find-up'
 import * as TypeFest from 'type-fest'
 import * as TsDeepMerge from 'ts-deepmerge'
 import * as Tar from 'tar'
-import * as Glob from 'glob'
+import * as ProjectFileManager from './project-file-manager.js'
 
-type FileCache = Map<string, string>
-
-const entryFilePath = NodePath.resolve(
-  '../veavr-react-components/src/components/card/usage-default.tsx'
-)
-
-const tsConfigFilePath = TypeScript.findConfigFile(
-  entryFilePath,
-  TypeScript.sys.fileExists
-)!
-
-console.log(tsConfigFilePath)
-
-const parseConfigHost = {
-  ...TypeScript.sys,
-  onUnRecoverableConfigFileDiagnostic: () => {},
-}
-
-const tsConfig = TypeScript.getParsedCommandLineOfConfigFile(
-  tsConfigFilePath,
-  undefined,
-  parseConfigHost
-)!
-
-const program = TypeScript.createProgram({
-  options: tsConfig.options,
-  rootNames: [
-    entryFilePath,
+buildProjectForEntryPoint({
+  entryPointFilePath: NodePath.resolve(
+    '../veavr-react-components/src/components/card/usage-default.tsx'
+  ),
+  additionalSourceFiles: [
     NodePath.resolve('../veavr-react-components/src/declarations/emotion.d.ts'),
   ],
 })
 
-const requiredFiles = program
-  .getSourceFiles()
-  .filter(
-    (file) =>
-      !program.isSourceFileFromExternalLibrary(file) &&
-      !program.isSourceFileDefaultLibrary(file)
-  )
-  .map((file) =>
-    NodePath.relative(NodePath.dirname(tsConfigFilePath), file.fileName)
-  )
+export function buildProjectForEntryPoint(options: {
+  entryPointFilePath: string
+  additionalSourceFiles?: string[]
+}): ProjectFileManager.ProjectFileManager {
+  const projectFileManager = new ProjectFileManager.ProjectFileManager()
 
-console.log(requiredFiles)
-
-const closestPackageJsonFilePath = FindUp.findUpSync('package.json', {
-  cwd: NodePath.dirname(tsConfigFilePath),
-})!
-console.log(closestPackageJsonFilePath)
-
-console.log(
-  createPackageJsonContent({
-    basePackageJsonFilePath: closestPackageJsonFilePath,
+  const { tsConfigFilePath } = addTypeScriptFiles({
+    entryPointFilePath: options.entryPointFilePath,
+    projectFileManager,
+    additionalSourceFiles: options.additionalSourceFiles,
   })
-)
 
-function createPackageJsonContent(options: {
-  basePackageJsonFilePath: string
+  const closestPackageJsonFilePath = FindUp.findUpSync('package.json', {
+    cwd: NodePath.dirname(tsConfigFilePath),
+  })!
+
+  addPackageJson({
+    projectFileManager,
+    packageJsonFilePath: closestPackageJsonFilePath,
+  })
+
+  projectFileManager.log()
+
+  return projectFileManager
+}
+
+function addTypeScriptFiles({
+  entryPointFilePath,
+  projectFileManager,
+  additionalSourceFiles,
+}: {
+  entryPointFilePath: string
+  projectFileManager: ProjectFileManager.ProjectFileManager
+  additionalSourceFiles?: string[]
+}): { tsConfigFilePath: string } {
+  const tsConfigFilePath = TypeScript.findConfigFile(
+    entryPointFilePath,
+    TypeScript.sys.fileExists
+  )!
+
+  const parseConfigHost = {
+    ...TypeScript.sys,
+    onUnRecoverableConfigFileDiagnostic: () => {},
+  }
+
+  const tsConfig = TypeScript.getParsedCommandLineOfConfigFile(
+    tsConfigFilePath,
+    undefined,
+    parseConfigHost
+  )!
+
+  const program = TypeScript.createProgram({
+    options: tsConfig.options,
+    rootNames: [entryPointFilePath, ...(additionalSourceFiles ?? [])],
+  })
+
+  program
+    .getSourceFiles()
+    .filter(
+      (file) =>
+        !program.isSourceFileFromExternalLibrary(file) &&
+        !program.isSourceFileDefaultLibrary(file)
+    )
+    .forEach((file) => {
+      const fileMountPath = NodePath.relative(
+        NodePath.dirname(tsConfigFilePath),
+        file.fileName
+      )
+      projectFileManager.addFile({
+        mountPath: fileMountPath,
+        filePath: file.fileName,
+      })
+    })
+
+  const resolvedTsConfigJsonObject =
+    getResolvedTsConfigJsonObject(tsConfigFilePath)
+
+  projectFileManager.addVirtualFile({
+    mountPath: 'tsconfig.json',
+    fileContent: JSON.stringify(resolvedTsConfigJsonObject),
+  })
+
+  return { tsConfigFilePath }
+}
+
+function getResolvedTsConfigJsonObject(
+  tsConfigFilePath: string
+): TsConfigLoader.Tsconfig {
+  const tsConfigObject = JSON.parse(
+    JSON.stringify(
+      TsConfigLoader.default({
+        cwd: NodePath.dirname(tsConfigFilePath),
+        filename: tsConfigFilePath,
+      })?.tsConfig
+    ).replaceAll('${configDir}', '.')
+  )
+  tsConfigObject.compilerOptions.baseUrl = '.'
+  delete tsConfigObject.extends
+
+  return tsConfigObject
+}
+
+function addPackageJson(options: {
+  packageJsonFilePath: string
+  projectFileManager: ProjectFileManager.ProjectFileManager
   overrides?: TypeFest.PackageJson.PackageJsonStandard
-}): TypeFest.PackageJson.PackageJsonStandard {
+}): void {
   const basePackageJsonObject: TypeFest.PackageJson.PackageJsonStandard =
-    JSON.parse(NodeFs.readFileSync(options.basePackageJsonFilePath).toString())
+    JSON.parse(NodeFs.readFileSync(options.packageJsonFilePath).toString())
 
   const copyFields: (keyof TypeFest.PackageJson.PackageJsonStandard)[] = [
     'name',
@@ -93,48 +148,30 @@ function createPackageJsonContent(options: {
   const packageJsonObject: TypeFest.PackageJson.PackageJsonStandard =
     TsDeepMerge.merge(trimmedBasePackageJsonObject, options.overrides ?? {})
 
-  const workspaceDependenciesFileMap = replaceWorkspaceDependencies({
-    packageJsonPath: options.basePackageJsonFilePath,
+  resolveWorkspaceDependencies({
+    packageJsonPath: options.packageJsonFilePath,
     packageJson: packageJsonObject,
-    fileCache: new Map(),
+    projectFileManager: options.projectFileManager,
   })
 
-  console.log(workspaceDependenciesFileMap)
-
-  return packageJsonObject
+  options.projectFileManager.addVirtualFile({
+    mountPath: 'package.json',
+    fileContent: JSON.stringify(packageJsonObject),
+  })
 }
 
-function getResolvedTsConfigJsonObject(
-  tsConfigPath: string
-): TsConfigLoader.Tsconfig {
-  const tsConfigObject = JSON.parse(
-    JSON.stringify(
-      TsConfigLoader.default({
-        cwd: NodePath.dirname(tsConfigFilePath),
-        filename: tsConfigFilePath,
-      })?.tsConfig
-    ).replaceAll('${configDir}', '.')
-  )
-  tsConfigObject.compilerOptions.baseUrl = '.'
-  delete tsConfigObject.extends
-
-  console.log(tsConfigObject)
-
-  return tsConfigObject
-}
-
-function replaceWorkspaceDependencies(options: {
+function resolveWorkspaceDependencies(options: {
   packageJsonPath: string
   packageJson: TypeFest.PackageJson.PackageJsonStandard
-  fileCache: FileCache
-}): Record<string, string> {
-  const result: Record<string, string> = {}
+  projectFileManager: ProjectFileManager.ProjectFileManager
+}): void {
   const tempDir = NodePath.resolve(
     NodePath.dirname(
       FindUp.findUpSync('package.json', { cwd: import.meta.dirname })!
     ),
     './temp'
   )
+
   NodeFs.mkdirSync(tempDir)
 
   for (const packageJsonKey in options.packageJson) {
@@ -181,18 +218,9 @@ function replaceWorkspaceDependencies(options: {
       NodeFs.mkdirSync(unpackDir, { recursive: true })
       Tar.extract({ sync: true, file: tgzPath, cwd: unpackDir, strip: 1 })
 
-      const packageFiles = Glob.globSync('./**/*.*', { cwd: unpackDir })
-
-      packageFiles.forEach((filePath) => {
-        const finalPath = NodePath.join(
-          'node_modules/',
-          dependencyKey,
-          filePath
-        )
-
-        result[finalPath] = NodeFs.readFileSync(
-          NodePath.resolve(unpackDir, filePath)
-        ).toString()
+      options.projectFileManager.addDir({
+        dirPath: unpackDir,
+        mountPath: NodePath.join('node_modules/', dependencyKey),
       })
     }
 
@@ -200,8 +228,6 @@ function replaceWorkspaceDependencies(options: {
   }
 
   NodeFs.rmSync(tempDir, { recursive: true })
-
-  return result
 }
 
 function findPackageDir(options: {
@@ -212,11 +238,12 @@ function findPackageDir(options: {
 
   const sanitizedOptions = {
     ...options,
-    startPath: options.startPath ?? process.cwd(),
+    startPath: options.startPath
+      ? NodePath.dirname(options.startPath)
+      : process.cwd(),
   }
-  const require = NodeModule.createRequire(
-    NodePath.dirname(sanitizedOptions.startPath)
-  )
+
+  const require = NodeModule.createRequire(sanitizedOptions.startPath)
 
   let modulePath: string | undefined = undefined
   for (const subPath of trySubPaths) {

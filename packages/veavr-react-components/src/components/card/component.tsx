@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { veavr } from '@veavr/react'
 
 import * as Parts from './parts.js'

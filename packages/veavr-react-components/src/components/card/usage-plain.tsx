@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import * as Types from './types.js'
 import { Card } from './component.js'
 
@@ -9,4 +7,6 @@ export const defaultProps: Types.Props = {
   body: "I'm a veavr component ready to be customized.",
 }
 
-export const Application = () => <Card {...defaultProps} />
+export const Application = () => {
+  return <Card {...defaultProps} />
+}

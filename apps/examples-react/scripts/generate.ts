@@ -3,7 +3,7 @@ import * as StackblitzProjectBuilder from '@veavr/stackblitz-project-builder'
 
 const entryFile = NodePath.resolve(
   import.meta.dirname,
-  '../../../packages/veavr-react-components/src/components/card/usage-default.tsx'
+  '../../../packages/veavr-react-components/src/components/card/usage-plain.tsx'
 )
 const themeDecl = NodePath.resolve(
   import.meta.dirname,

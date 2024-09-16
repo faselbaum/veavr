@@ -20,6 +20,11 @@ export function buildProjectForEntryPoint(options: {
     entryPointFilePath: options.entryPointFilePath,
     projectFileManager,
     additionalSourceFiles: options.additionalSourceFiles,
+    tsConfigOverrides: {
+      compilerOptions: {
+        allowImportingTsExtensions: true,
+      },
+    },
   })
 
   addViteConfig({ projectFileManager })
@@ -37,13 +42,15 @@ export function buildProjectForEntryPoint(options: {
       scripts: {
         dev: 'vite',
       },
-      devDependencies: {
+      dependencies: {
+        react: 'latest',
         'react-dom': 'latest',
+        vite: 'latest',
+        '@vitejs/plugin-react': 'latest',
+        'vite-tsconfig-paths': 'latest',
       },
     },
   })
-
-  projectFileManager.log()
 
   return projectFileManager
 }
@@ -52,10 +59,12 @@ function addTypeScriptFiles({
   entryPointFilePath,
   projectFileManager,
   additionalSourceFiles,
+  tsConfigOverrides,
 }: {
   entryPointFilePath: string
   projectFileManager: ProjectFileManager.ProjectFileManager
   additionalSourceFiles?: string[]
+  tsConfigOverrides?: TypeFest.TsConfigJson
 }): { tsConfigFilePath: string; entryFileMountPoint: string } {
   const tsConfigFilePath = TypeScript.findConfigFile(
     entryPointFilePath,
@@ -96,8 +105,10 @@ function addTypeScriptFiles({
       })
     })
 
-  const resolvedTsConfigJsonObject =
-    getResolvedTsConfigJsonObject(tsConfigFilePath)
+  const resolvedTsConfigJsonObject = getResolvedTsConfigJsonObject({
+    tsConfigFilePath,
+    overrides: tsConfigOverrides,
+  })
 
   projectFileManager.addVirtualFile({
     mountPath: 'tsconfig.json',
@@ -113,9 +124,13 @@ function addTypeScriptFiles({
   }
 }
 
-function getResolvedTsConfigJsonObject(
+function getResolvedTsConfigJsonObject({
+  tsConfigFilePath,
+  overrides,
+}: {
   tsConfigFilePath: string
-): TsConfigLoader.Tsconfig {
+  overrides?: TypeFest.TsConfigJson
+}): TypeFest.TsConfigJson {
   const tsConfigObject = JSON.parse(
     JSON.stringify(
       TsConfigLoader.default({
@@ -127,7 +142,9 @@ function getResolvedTsConfigJsonObject(
   tsConfigObject.compilerOptions.baseUrl = '.'
   delete tsConfigObject.extends
 
-  return tsConfigObject
+  const mergedConfig = TsDeepMerge.merge(tsConfigObject, overrides)
+
+  return mergedConfig
 }
 
 function addPackageJson(options: {
@@ -206,8 +223,6 @@ function resolveWorkspaceDependencies(options: {
         continue
       }
 
-      depkeysToDelete.push(dependencyKey)
-
       const dependencyPackageDir = findPackageDir({
         packageName: dependencyKey,
         startPath: options.packageJsonPath,
@@ -234,8 +249,6 @@ function resolveWorkspaceDependencies(options: {
 
       dependencies[dependencyKey] = `file:local_modules/${dependencyKey}`
     }
-
-    // depkeysToDelete.forEach((key) => Reflect.deleteProperty(dependencies, key))
   }
 
   NodeFs.rmSync(tempDir, { recursive: true })
@@ -320,7 +333,6 @@ function addMountScript(options: {
   projectFileManager: ProjectFileManager.ProjectFileManager
 }): void {
   const mountScript = `
-    import * as React from "react";
     import { createRoot } from "react-dom/client";
     import { Application } from "../${options.entryFileMountPoint}";
     

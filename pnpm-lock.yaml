@@ -132,21 +132,12 @@ importers:
       '@veavr/react':
         specifier: workspace:*
         version: link:../veavr-react
-      '@vitejs/plugin-react':
-        specifier: ^4.3.1
-        version: 4.3.1(vite@5.4.3(@types/node@22.5.5))
       emotion-reset:
         specifier: ^3.0.1
         version: 3.0.1(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))
       react:
         specifier: '>=17'
         version: 18.3.1
-      vite:
-        specifier: ^5.4.1
-        version: 5.4.3(@types/node@22.5.5)
-      vite-tsconfig-paths:
-        specifier: ^5.0.1
-        version: 5.0.1(typescript@5.6.2)(vite@5.4.3(@types/node@22.5.5))
     devDependencies:
       '@types/react':
         specifier: ^18.3.3

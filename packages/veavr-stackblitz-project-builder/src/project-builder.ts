@@ -33,6 +33,14 @@ export function buildProjectForEntryPoint(options: {
   addPackageJson({
     projectFileManager,
     packageJsonFilePath: closestPackageJsonFilePath,
+    overrides: {
+      scripts: {
+        dev: 'vite',
+      },
+      devDependencies: {
+        'react-dom': 'latest',
+      },
+    },
   })
 
   projectFileManager.log()
@@ -221,11 +229,13 @@ function resolveWorkspaceDependencies(options: {
 
       options.projectFileManager.addDir({
         dirPath: unpackDir,
-        mountPath: NodePath.join('node_modules/', dependencyKey),
+        mountPath: NodePath.join('local_modules/', dependencyKey),
       })
+
+      dependencies[dependencyKey] = `file:local_modules/${dependencyKey}`
     }
 
-    depkeysToDelete.forEach((key) => Reflect.deleteProperty(dependencies, key))
+    // depkeysToDelete.forEach((key) => Reflect.deleteProperty(dependencies, key))
   }
 
   NodeFs.rmSync(tempDir, { recursive: true })
@@ -315,7 +325,7 @@ function addMountScript(options: {
     import { Application } from "../${options.entryFileMountPoint}";
     
     const root = createRoot(document.querySelector('#root')!);
-    root.render(Application);
+    root.render(<Application />);
   `
 
   options.projectFileManager.addVirtualFile({

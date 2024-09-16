@@ -41,6 +41,9 @@ importers:
       '@emotion/styled':
         specifier: ^11.13.0
         version: 11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1)
+      '@stackblitz/sdk':
+        specifier: ^1.11.0
+        version: 1.11.0
       '@storybook/addon-essentials':
         specifier: ^8.2.9
         version: 8.2.9(storybook@8.2.9(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
@@ -65,6 +68,9 @@ importers:
       '@storybook/test':
         specifier: ^8.2.9
         version: 8.2.9(storybook@8.2.9(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
+      '@types/node':
+        specifier: ^22.5.5
+        version: 22.5.5
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.5
@@ -74,9 +80,9 @@ importers:
       '@veavr/react-components':
         specifier: workspace:*
         version: link:../../packages/veavr-react-components
-      '@veavr/stackblitz-creator':
+      '@veavr/stackblitz-project-builder':
         specifier: workspace:*
-        version: link:../../packages/veavr-stackblitz-creator
+        version: link:../../packages/veavr-stackblitz-project-builder
       '@vitejs/plugin-react':
         specifier: ^4.3.1
         version: 4.3.1(vite@5.4.3(@types/node@22.5.5))
@@ -146,7 +152,7 @@ importers:
         specifier: ^18.3.3
         version: 18.3.5
 
-  packages/veavr-stackblitz-creator:
+  packages/veavr-stackblitz-project-builder:
     dependencies:
       '@stackblitz/sdk':
         specifier: ^1.11.0

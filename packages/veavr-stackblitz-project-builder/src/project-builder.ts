@@ -10,26 +10,21 @@ import * as TsDeepMerge from 'ts-deepmerge'
 import * as Tar from 'tar'
 import * as ProjectFileManager from './project-file-manager.js'
 
-buildProjectForEntryPoint({
-  entryPointFilePath: NodePath.resolve(
-    '../veavr-react-components/src/components/card/usage-default.tsx'
-  ),
-  additionalSourceFiles: [
-    NodePath.resolve('../veavr-react-components/src/declarations/emotion.d.ts'),
-  ],
-})
-
 export function buildProjectForEntryPoint(options: {
   entryPointFilePath: string
   additionalSourceFiles?: string[]
 }): ProjectFileManager.ProjectFileManager {
   const projectFileManager = new ProjectFileManager.ProjectFileManager()
 
-  const { tsConfigFilePath } = addTypeScriptFiles({
+  const { tsConfigFilePath, entryFileMountPoint } = addTypeScriptFiles({
     entryPointFilePath: options.entryPointFilePath,
     projectFileManager,
     additionalSourceFiles: options.additionalSourceFiles,
   })
+
+  addViteConfig({ projectFileManager })
+  addIndexHtml({ projectFileManager })
+  addMountScript({ projectFileManager, entryFileMountPoint })
 
   const closestPackageJsonFilePath = FindUp.findUpSync('package.json', {
     cwd: NodePath.dirname(tsConfigFilePath),
@@ -53,7 +48,7 @@ function addTypeScriptFiles({
   entryPointFilePath: string
   projectFileManager: ProjectFileManager.ProjectFileManager
   additionalSourceFiles?: string[]
-}): { tsConfigFilePath: string } {
+}): { tsConfigFilePath: string; entryFileMountPoint: string } {
   const tsConfigFilePath = TypeScript.findConfigFile(
     entryPointFilePath,
     TypeScript.sys.fileExists
@@ -101,7 +96,13 @@ function addTypeScriptFiles({
     fileContent: JSON.stringify(resolvedTsConfigJsonObject),
   })
 
-  return { tsConfigFilePath }
+  return {
+    tsConfigFilePath,
+    entryFileMountPoint: NodePath.relative(
+      NodePath.dirname(tsConfigFilePath),
+      entryPointFilePath
+    ),
+  }
 }
 
 function getResolvedTsConfigJsonObject(
@@ -265,4 +266,60 @@ function findPackageDir(options: {
   const packageDir = NodePath.dirname(packageJsonPath)
 
   return packageDir
+}
+
+function addViteConfig(options: {
+  projectFileManager: ProjectFileManager.ProjectFileManager
+}): void {
+  const viteConfig = `
+    import { defineConfig } from "vite";
+    import react from "@vitejs/plugin-react";
+    import tsconfigPaths from "vite-tsconfig-paths";
+
+    export default defineConfig({
+      plugins: [react(), tsconfigPaths()],
+    });
+  `
+
+  options.projectFileManager.addVirtualFile({
+    mountPath: 'vite.config.ts',
+    fileContent: viteConfig,
+  })
+}
+
+function addIndexHtml(options: {
+  projectFileManager: ProjectFileManager.ProjectFileManager
+}): void {
+  const indexHtml = `
+    <html>
+      <body>
+        <div id="root"></div>
+        <script type="module" src="./src/mount.tsx"></script>
+      </body>
+    </html>
+  `
+
+  options.projectFileManager.addVirtualFile({
+    mountPath: 'index.html',
+    fileContent: indexHtml,
+  })
+}
+
+function addMountScript(options: {
+  entryFileMountPoint: string
+  projectFileManager: ProjectFileManager.ProjectFileManager
+}): void {
+  const mountScript = `
+    import * as React from "react";
+    import { createRoot } from "react-dom/client";
+    import { Application } from "../${options.entryFileMountPoint}";
+    
+    const root = createRoot(document.querySelector('#root')!);
+    root.render(Application);
+  `
+
+  options.projectFileManager.addVirtualFile({
+    mountPath: 'src/mount.tsx',
+    fileContent: mountScript,
+  })
 }

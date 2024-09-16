@@ -1,5 +1,5 @@
 {
-  "name": "@veavr/stackblitz-creator",
+  "name": "@veavr/stackblitz-project-builder",
   "private": true,
   "version": "1.0.0",
   "description": "",
@@ -24,8 +24,7 @@
   },
   "scripts": {
     "dev": "wireit",
-    "build": "wireit",
-    "cli": "tsx ./src/resolve-dependencies.ts"
+    "build": "wireit"
   },
   "dependencies": {
     "@stackblitz/sdk": "^1.11.0",

@@ -4,3 +4,4 @@ dist/
 .wireit/
 *storybook.log
 .pnpm-store
+*.generated.*

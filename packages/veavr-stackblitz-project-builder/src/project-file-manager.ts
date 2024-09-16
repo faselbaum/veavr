@@ -40,6 +40,23 @@ export class ProjectFileManager {
     return this.#mountedFiles
   }
 
+  writeProjectModule(options: { outDir: string }): void {
+    NodeFs.mkdirSync(options.outDir, { recursive: true })
+
+    const fileContent = `
+      import * as Stackblitz from '@stackblitz/sdk'
+
+      export const projectFiles: Stackblitz.ProjectFiles = ${JSON.stringify(this.#mountedFiles)}
+    `
+
+    const outPath = NodePath.resolve(
+      options.outDir,
+      './stackblitz.project.generated.ts'
+    )
+
+    NodeFs.writeFileSync(outPath, fileContent, { flag: 'w+' })
+  }
+
   log(): void {
     console.log(this.#mountedFiles)
   }

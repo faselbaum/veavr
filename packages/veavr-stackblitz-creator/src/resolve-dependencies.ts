@@ -11,8 +11,6 @@ import * as TsDeepMerge from 'ts-deepmerge'
 import * as Tar from 'tar'
 import * as Glob from 'glob'
 
-const require = NodeModule.createRequire(import.meta.url)
-
 type FileCache = Map<string, string>
 
 const entryFilePath = NodePath.resolve(
@@ -96,6 +94,7 @@ function createPackageJsonContent(options: {
     TsDeepMerge.merge(trimmedBasePackageJsonObject, options.overrides ?? {})
 
   const workspaceDependenciesFileMap = replaceWorkspaceDependencies({
+    packageJsonPath: options.basePackageJsonFilePath,
     packageJson: packageJsonObject,
     fileCache: new Map(),
   })
@@ -125,6 +124,7 @@ function getResolvedTsConfigJsonObject(
 }
 
 function replaceWorkspaceDependencies(options: {
+  packageJsonPath: string
   packageJson: TypeFest.PackageJson.PackageJsonStandard
   fileCache: FileCache
 }): Record<string, string> {
@@ -135,6 +135,7 @@ function replaceWorkspaceDependencies(options: {
     ),
     './temp'
   )
+  NodeFs.mkdirSync(tempDir)
 
   for (const packageJsonKey in options.packageJson) {
     if (!/dependencies/i.test(packageJsonKey)) {
@@ -161,20 +162,20 @@ function replaceWorkspaceDependencies(options: {
 
       depkeysToDelete.push(dependencyKey)
 
-      const modulePath = require.resolve(NodePath.join(dependencyKey))
-      const packageJsonPath = FindUp.findUpSync('package.json', {
-        cwd: modulePath,
+      const dependencyPackageDir = findPackageDir({
+        packageName: dependencyKey,
+        startPath: options.packageJsonPath,
       })!
-      const packageDir = NodePath.dirname(packageJsonPath)
 
-      const tgzPath = NodeChildProcess.execSync(
-        `pnpm pack --pack-destination "${tempDir}"`,
+      const packResponse = NodeChildProcess.execSync(
+        `npm pack --pack-destination "${tempDir}"`,
         {
-          cwd: packageDir,
+          cwd: dependencyPackageDir,
         }
       )
         .toString()
         .trim()
+      const tgzPath = NodePath.resolve(tempDir, packResponse)
 
       const unpackDir = NodePath.resolve(tempDir, './', dependencyKey)
       NodeFs.mkdirSync(unpackDir, { recursive: true })
@@ -201,4 +202,40 @@ function replaceWorkspaceDependencies(options: {
   NodeFs.rmSync(tempDir, { recursive: true })
 
   return result
+}
+
+function findPackageDir(options: {
+  packageName: string
+  startPath?: string
+}): string | undefined {
+  const trySubPaths = ['', '/package.json']
+
+  const sanitizedOptions = {
+    ...options,
+    startPath: options.startPath ?? process.cwd(),
+  }
+  const require = NodeModule.createRequire(
+    NodePath.dirname(sanitizedOptions.startPath)
+  )
+
+  let modulePath: string | undefined = undefined
+  for (const subPath of trySubPaths) {
+    if (modulePath !== undefined) {
+      break
+    }
+
+    try {
+      const tryPath = NodePath.join(sanitizedOptions.packageName, subPath)
+      modulePath = require.resolve(tryPath)
+    } finally {
+      continue
+    }
+  }
+
+  const packageJsonPath = FindUp.findUpSync('package.json', {
+    cwd: modulePath,
+  })!
+  const packageDir = NodePath.dirname(packageJsonPath)
+
+  return packageDir
 }

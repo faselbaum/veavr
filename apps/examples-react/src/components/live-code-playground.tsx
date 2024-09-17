@@ -3,7 +3,7 @@ import * as StackblitzSdk from '@stackblitz/sdk'
 
 export type ShowCaseModule = {
   projectFiles: StackblitzSdk.ProjectFiles
-  projectOptions: StackblitzSdk.EmbedOptions
+  projectOptions: StackblitzSdk.ProjectOptions
 }
 
 export type LiveCodePlaygroundProps = {
@@ -34,22 +34,23 @@ export const LiveCodePlayground: React.FunctionComponent<
     }
 
     StackblitzSdk.default.embedProject(
-      'stackblitz_host0',
+      'stackblitz_host',
       {
         template: 'node',
         files: module.projectFiles,
-        title: 'SDK Test',
+        title: 'veavr Playground',
       },
       {
         ...module.projectOptions,
         startScript: 'dev',
+        terminalHeight: 0,
       }
     )
   }, [module])
 
   return (
-    <div style={{ height: '60vw', display: 'flex', alignItems: 'stretch' }}>
-      <div id="stackblitz_host0" />
+    <div style={{ height: '40vw', display: 'flex', alignItems: 'stretch' }}>
+      <div id="stackblitz_host" />
     </div>
   )
 }

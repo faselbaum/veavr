@@ -88,7 +88,7 @@ export class ProjectFileManager {
 
       export const projectFiles: Stackblitz.ProjectFiles = ${JSON.stringify(this.#mountedFiles)}
 
-      export const projectOptions: Stackblitz.EmbedOptions = {
+      export const projectOptions: Stackblitz.ProjectOptions = {
         openFile: ${JSON.stringify(this.openFiles.join(','))}
       }
     `

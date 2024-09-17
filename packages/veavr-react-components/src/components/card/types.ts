@@ -6,8 +6,3 @@ export type Props = {
   body?: React.ReactNode
   variant?: 'small' | 'medium'
 }
-
-export type State = {
-  title: () => string
-  variant: () => Exclude<Props['variant'], undefined>
-}

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as StackblitzSdk from '@stackblitz/sdk'
-import * as StackblitzProjects from '../stackblitz-projects/@veavr/react-components/src/components/card/usage-plain.project.generated'
+import * as StackblitzProjects from '../stackblitz-projects/@veavr/react-components/src/components/card/showcase.override-props.project.generated'
 
 export const StackBlitzDevEnv: React.FunctionComponent = () => {
   React.useEffect(() => {

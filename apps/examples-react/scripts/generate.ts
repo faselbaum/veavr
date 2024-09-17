@@ -8,7 +8,7 @@ const outDir = NodePath.resolve(
 
 const projects = await StackblitzProjectBuilder.buildProjects({
   packageName: '@veavr/react-components',
-  entryPointFileGlob: ['./src/**/*.showcase.*', './src/**/usage-*'],
+  entryPointFileGlob: ['./src/**/showcase.*', './src/**/usage-*'],
   additionalSourceFiles: ['./src/declarations/emotion.d.ts'],
 })
 

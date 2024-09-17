@@ -1,6 +1,12 @@
-import { StackBlitzDevEnv } from '../src/components/stackblitz-dev-env'
+import { LiveCodePlayground } from '../src/components/live-code-playground'
 
-<StackBlitzDevEnv />
+<LiveCodePlayground
+  module={
+    import(
+      '../src/stackblitz-projects/@veavr/react-components/src/components/card/showcase.plain.project.generated'
+    )
+  }
+/>
 
 # Introduction
 

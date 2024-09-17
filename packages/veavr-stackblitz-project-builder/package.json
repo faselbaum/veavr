@@ -33,7 +33,9 @@
     "find-up": "^7.0.0",
     "ts-deepmerge": "^7.0.1",
     "tar": "^7.4.3",
-    "glob": "^11.0.0"
+    "glob": "^11.0.0",
+    "@pnpm/find-workspace-dir": "^7.0.1",
+    "@pnpm/find-workspace-packages": "^6.0.9"
   },
   "devDependencies": {
     "type-fest": "^4.25.0",

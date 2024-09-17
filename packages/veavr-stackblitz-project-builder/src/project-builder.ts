@@ -2,24 +2,69 @@ import * as TypeScript from 'typescript'
 import * as NodePath from 'node:path'
 import * as NodeFs from 'node:fs'
 import * as NodeChildProcess from 'node:child_process'
-import * as NodeModule from 'node:module'
 import TsConfigLoader from 'tsconfig-loader'
 import * as FindUp from 'find-up'
 import * as TypeFest from 'type-fest'
 import * as TsDeepMerge from 'ts-deepmerge'
 import * as Tar from 'tar'
+import * as Glob from 'glob'
+import { findWorkspacePackageDir } from './find-workspace-package-dir.js'
 import * as ProjectFileManager from './project-file-manager.js'
 
-export function buildProjectForEntryPoint(options: {
+export async function buildProjects(options: {
+  packageName: string
+  entryPointFileGlob: string[]
+  additionalSourceFiles?: string[]
+}): Promise<ProjectFileManager.ProjectFileManager[]> {
+  const packageDir = await findWorkspacePackageDir({
+    packageName: options.packageName,
+  })
+  const entryPointFilePaths = Glob.globSync(options.entryPointFileGlob, {
+    cwd: packageDir,
+  })
+
+  const result: ProjectFileManager.ProjectFileManager[] = []
+
+  for (const filePath of entryPointFilePaths) {
+    const projectManager = await buildProject({
+      entryPointFilePath: filePath,
+      additionalSourceFiles: options.additionalSourceFiles,
+      packageName: options.packageName,
+    })
+
+    result.push(projectManager)
+  }
+
+  return result
+}
+
+export async function buildProject(options: {
+  packageName: string
   entryPointFilePath: string
   additionalSourceFiles?: string[]
-}): ProjectFileManager.ProjectFileManager {
-  const projectFileManager = new ProjectFileManager.ProjectFileManager()
+}): Promise<ProjectFileManager.ProjectFileManager> {
+  const packageDir = await findWorkspacePackageDir({
+    packageName: options.packageName,
+  })
+
+  const projectFileManager = new ProjectFileManager.ProjectFileManager({
+    sourcePackageName: options.packageName,
+    entryFilePath: options.entryPointFilePath,
+  })
+
+  const absoluteEntryPointFilePath = NodePath.resolve(
+    packageDir!,
+    options.entryPointFilePath
+  )
+
+  const absoluteAdditionalSourceFilePaths = (
+    options.additionalSourceFiles ?? []
+  ).map((filePath) => NodePath.resolve(packageDir!, filePath))
 
   const { tsConfigFilePath, entryFileMountPoint } = addTypeScriptFiles({
-    entryPointFilePath: options.entryPointFilePath,
+    entryPointFilePath: absoluteEntryPointFilePath,
     projectFileManager,
-    additionalSourceFiles: options.additionalSourceFiles,
+    additionalSourceFiles: absoluteAdditionalSourceFilePaths,
     tsConfigOverrides: {
       compilerOptions: {
         allowImportingTsExtensions: true,
@@ -35,7 +80,7 @@ export function buildProjectForEntryPoint(options: {
     cwd: NodePath.dirname(tsConfigFilePath),
   })!
 
-  addPackageJson({
+  await addPackageJson({
     projectFileManager,
     packageJsonFilePath: closestPackageJsonFilePath,
     overrides: {
@@ -99,10 +144,15 @@ function addTypeScriptFiles({
         NodePath.dirname(tsConfigFilePath),
         file.fileName
       )
+
       projectFileManager.addFile({
         mountPath: fileMountPath,
         filePath: file.fileName,
       })
+
+      if (file.fileName === entryPointFilePath) {
+        projectFileManager.openFiles.push(fileMountPath)
+      }
     })
 
   const resolvedTsConfigJsonObject = getResolvedTsConfigJsonObject({
@@ -147,11 +197,11 @@ function getResolvedTsConfigJsonObject({
   return mergedConfig
 }
 
-function addPackageJson(options: {
+async function addPackageJson(options: {
   packageJsonFilePath: string
   projectFileManager: ProjectFileManager.ProjectFileManager
   overrides?: TypeFest.PackageJson.PackageJsonStandard
-}): void {
+}): Promise<void> {
   const basePackageJsonObject: TypeFest.PackageJson.PackageJsonStandard =
     JSON.parse(NodeFs.readFileSync(options.packageJsonFilePath).toString())
 
@@ -174,7 +224,7 @@ function addPackageJson(options: {
   const packageJsonObject: TypeFest.PackageJson.PackageJsonStandard =
     TsDeepMerge.merge(trimmedBasePackageJsonObject, options.overrides ?? {})
 
-  resolveWorkspaceDependencies({
+  await resolveWorkspaceDependencies({
     packageJsonPath: options.packageJsonFilePath,
     packageJson: packageJsonObject,
     projectFileManager: options.projectFileManager,
@@ -186,11 +236,11 @@ function addPackageJson(options: {
   })
 }
 
-function resolveWorkspaceDependencies(options: {
+async function resolveWorkspaceDependencies(options: {
   packageJsonPath: string
   packageJson: TypeFest.PackageJson.PackageJsonStandard
   projectFileManager: ProjectFileManager.ProjectFileManager
-}): void {
+}): Promise<void> {
   const tempDir = NodePath.resolve(
     NodePath.dirname(
       FindUp.findUpSync('package.json', { cwd: import.meta.dirname })!
@@ -198,7 +248,7 @@ function resolveWorkspaceDependencies(options: {
     './temp'
   )
 
-  NodeFs.mkdirSync(tempDir)
+  NodeFs.mkdirSync(tempDir, { recursive: true })
 
   for (const packageJsonKey in options.packageJson) {
     if (!/dependencies/i.test(packageJsonKey)) {
@@ -223,9 +273,8 @@ function resolveWorkspaceDependencies(options: {
         continue
       }
 
-      const dependencyPackageDir = findPackageDir({
+      const dependencyPackageDir = await findWorkspacePackageDir({
         packageName: dependencyKey,
-        startPath: options.packageJsonPath,
       })!
 
       const packResponse = NodeChildProcess.execSync(
@@ -252,43 +301,6 @@ function resolveWorkspaceDependencies(options: {
   }
 
   NodeFs.rmSync(tempDir, { recursive: true })
-}
-
-function findPackageDir(options: {
-  packageName: string
-  startPath?: string
-}): string | undefined {
-  const trySubPaths = ['', '/package.json']
-
-  const sanitizedOptions = {
-    ...options,
-    startPath: options.startPath
-      ? NodePath.dirname(options.startPath)
-      : process.cwd(),
-  }
-
-  const require = NodeModule.createRequire(sanitizedOptions.startPath)
-
-  let modulePath: string | undefined = undefined
-  for (const subPath of trySubPaths) {
-    if (modulePath !== undefined) {
-      break
-    }
-
-    try {
-      const tryPath = NodePath.join(sanitizedOptions.packageName, subPath)
-      modulePath = require.resolve(tryPath)
-    } finally {
-      continue
-    }
-  }
-
-  const packageJsonPath = FindUp.findUpSync('package.json', {
-    cwd: modulePath,
-  })!
-  const packageDir = NodePath.dirname(packageJsonPath)
-
-  return packageDir
 }
 
 function addViteConfig(options: {

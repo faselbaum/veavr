@@ -14,7 +14,7 @@ import * as ProjectFileManager from './project-file-manager.js'
 export async function buildProjects(options: {
   packageName: string
   entryPointFileGlob: string[]
-  additionalSourceFiles?: string[]
+  additionalSourceFilesGlob?: string[]
   openFile?: ProjectFileManager.OpenFileMatchFunction
 }): Promise<ProjectFileManager.ProjectFileManager[]> {
   const packageDir = await findWorkspacePackageDir({
@@ -29,7 +29,7 @@ export async function buildProjects(options: {
   for (const filePath of entryPointFilePaths) {
     const projectManager = await buildProject({
       entryPointFilePath: filePath,
-      additionalSourceFiles: options.additionalSourceFiles,
+      additionalSourceFilesGlob: options.additionalSourceFilesGlob,
       packageName: options.packageName,
       openFile: options.openFile,
     })
@@ -43,7 +43,7 @@ export async function buildProjects(options: {
 export async function buildProject(options: {
   packageName: string
   entryPointFilePath: string
-  additionalSourceFiles?: string[]
+  additionalSourceFilesGlob?: string[]
   openFile?: ProjectFileManager.OpenFileMatchFunction
 }): Promise<ProjectFileManager.ProjectFileManager> {
   const packageDir = await findWorkspacePackageDir({
@@ -52,6 +52,7 @@ export async function buildProject(options: {
 
   const projectFileManager = new ProjectFileManager.ProjectFileManager({
     sourcePackageName: options.packageName,
+    sourcePackageDirPath: packageDir!,
     entryFilePath: options.entryPointFilePath,
     openFileMatcher: options.openFile,
   })
@@ -62,7 +63,7 @@ export async function buildProject(options: {
   )
 
   const absoluteAdditionalSourceFilePaths = (
-    options.additionalSourceFiles ?? []
+    options.additionalSourceFilesGlob ?? []
   ).map((filePath) => NodePath.resolve(packageDir!, filePath))
 
   const { tsConfigFilePath, entryFileMountPoint } = addTypeScriptFiles({
@@ -104,19 +105,14 @@ export async function buildProject(options: {
   return projectFileManager
 }
 
-function addTypeScriptFiles({
-  entryPointFilePath,
-  projectFileManager,
-  additionalSourceFiles,
-  tsConfigOverrides,
-}: {
+function addTypeScriptFiles(options: {
   entryPointFilePath: string
   projectFileManager: ProjectFileManager.ProjectFileManager
   additionalSourceFiles?: string[]
   tsConfigOverrides?: TypeFest.TsConfigJson
 }): { tsConfigFilePath: string; entryFileMountPoint: string } {
   const tsConfigFilePath = TypeScript.findConfigFile(
-    entryPointFilePath,
+    options.entryPointFilePath,
     TypeScript.sys.fileExists
   )!
 
@@ -131,9 +127,14 @@ function addTypeScriptFiles({
     parseConfigHost
   )!
 
+  const additionalSourceFiles = Glob.globSync(
+    options.additionalSourceFiles ?? [],
+    { cwd: options.projectFileManager.sourcePackageDirPath }
+  )
+
   const program = TypeScript.createProgram({
     options: tsConfig.options,
-    rootNames: [entryPointFilePath, ...(additionalSourceFiles ?? [])],
+    rootNames: [options.entryPointFilePath, ...(additionalSourceFiles ?? [])],
   })
 
   program
@@ -149,7 +150,7 @@ function addTypeScriptFiles({
         file.fileName
       )
 
-      projectFileManager.addFile({
+      options.projectFileManager.addFile({
         mountPath: fileMountPath,
         filePath: file.fileName,
       })
@@ -157,10 +158,10 @@ function addTypeScriptFiles({
 
   const resolvedTsConfigJsonObject = getResolvedTsConfigJsonObject({
     tsConfigFilePath,
-    overrides: tsConfigOverrides,
+    overrides: options.tsConfigOverrides,
   })
 
-  projectFileManager.addVirtualFile({
+  options.projectFileManager.addVirtualFile({
     mountPath: 'tsconfig.json',
     fileContent: JSON.stringify(resolvedTsConfigJsonObject),
   })
@@ -169,7 +170,7 @@ function addTypeScriptFiles({
     tsConfigFilePath,
     entryFileMountPoint: NodePath.relative(
       NodePath.dirname(tsConfigFilePath),
-      entryPointFilePath
+      options.entryPointFilePath
     ),
   }
 }

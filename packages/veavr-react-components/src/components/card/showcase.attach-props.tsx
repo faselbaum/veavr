@@ -1,6 +1,8 @@
 import * as React from 'react'
 
 import { defaultProps } from './showcase-common.js'
+
+// ˇ veavr component
 import { Card } from './component.js'
 
 export const Application = () => {

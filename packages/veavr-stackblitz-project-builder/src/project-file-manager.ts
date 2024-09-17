@@ -8,23 +8,35 @@ type AddOptions<T> = T & {
 
 export type OpenFileMatchFunction = (options: {
   fileMountPath: string
+  entryPointFileMountPath: string
 }) => boolean
 
 export class ProjectFileManager {
   #mountedFiles: Record<string, string> = {}
   #sourcePackageName: string = ''
+  #sourcePackageDirPath: string = ''
   #openFiles: string[] = []
   #entryFilePath: string = ''
   #openFileMatcher?: OpenFileMatchFunction = undefined
 
   public constructor(options: {
     sourcePackageName: string
+    sourcePackageDirPath: string
     entryFilePath: string
     openFileMatcher?: OpenFileMatchFunction
   }) {
     this.#sourcePackageName = options.sourcePackageName
+    this.#sourcePackageDirPath = options.sourcePackageDirPath
     this.#entryFilePath = options.entryFilePath
     this.#openFileMatcher = options.openFileMatcher
+  }
+
+  get sourcePackageName(): string {
+    return this.#sourcePackageName
+  }
+
+  get sourcePackageDirPath(): string {
+    return this.#sourcePackageDirPath
   }
 
   get openFiles(): ReadonlyArray<string> {
@@ -37,11 +49,13 @@ export class ProjectFileManager {
   }: AddOptions<{ fileContent: string }>): void {
     this.#mountedFiles[mountPath] = fileContent
 
-    if (mountPath === this.#entryFilePath) {
-      this.#openFiles = [mountPath, ...this.#openFiles]
-    } else if (
-      this.#openFileMatcher &&
-      this.#openFileMatcher({ fileMountPath: mountPath })
+    if (
+      (this.#openFileMatcher &&
+        this.#openFileMatcher({
+          fileMountPath: mountPath,
+          entryPointFileMountPath: this.#entryFilePath,
+        })) ||
+      mountPath === this.#entryFilePath
     ) {
       this.#openFiles = [...this.#openFiles, mountPath]
     }

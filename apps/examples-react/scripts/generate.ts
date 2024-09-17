@@ -9,9 +9,15 @@ const outDir = NodePath.resolve(
 const projects = await StackblitzProjectBuilder.buildProjects({
   packageName: '@veavr/react-components',
   entryPointFileGlob: ['./src/**/showcase.*'],
-  additionalSourceFiles: ['./src/declarations/emotion.d.ts'],
-  openFile: ({ fileMountPath }) =>
-    /src\/components\/.*\/component\..*/.test(fileMountPath),
+  additionalSourceFilesGlob: ['./src/**/*.d.ts'],
+  openFile: ({ fileMountPath, entryPointFileMountPath }) => {
+    const entryFileMountDir = NodePath.dirname(entryPointFileMountPath)
+    const matchRegex = new RegExp(
+      `${entryFileMountDir.replaceAll('/', '\\/')}\\/component.*`
+    )
+
+    return matchRegex.test(fileMountPath)
+  },
 })
 
 for (const project of projects) {

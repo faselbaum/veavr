@@ -50,8 +50,7 @@
       ],
       "output": [
         "./src/stackblitz-projects/**/*"
-      ],
-      "clean": "if-file-deleted"
+      ]
     },
     "dev": {
       "command": "storybook dev -p 6006",

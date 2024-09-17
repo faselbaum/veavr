@@ -8,8 +8,10 @@ const outDir = NodePath.resolve(
 
 const projects = await StackblitzProjectBuilder.buildProjects({
   packageName: '@veavr/react-components',
-  entryPointFileGlob: ['./src/**/showcase.*', './src/**/usage-*'],
+  entryPointFileGlob: ['./src/**/showcase.*'],
   additionalSourceFiles: ['./src/declarations/emotion.d.ts'],
+  openFile: ({ fileMountPath }) =>
+    /src\/components\/.*\/component\..*/.test(fileMountPath),
 })
 
 for (const project of projects) {

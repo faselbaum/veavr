@@ -15,6 +15,7 @@ export async function buildProjects(options: {
   packageName: string
   entryPointFileGlob: string[]
   additionalSourceFiles?: string[]
+  openFile?: ProjectFileManager.OpenFileMatchFunction
 }): Promise<ProjectFileManager.ProjectFileManager[]> {
   const packageDir = await findWorkspacePackageDir({
     packageName: options.packageName,
@@ -30,6 +31,7 @@ export async function buildProjects(options: {
       entryPointFilePath: filePath,
       additionalSourceFiles: options.additionalSourceFiles,
       packageName: options.packageName,
+      openFile: options.openFile,
     })
 
     result.push(projectManager)
@@ -42,6 +44,7 @@ export async function buildProject(options: {
   packageName: string
   entryPointFilePath: string
   additionalSourceFiles?: string[]
+  openFile?: ProjectFileManager.OpenFileMatchFunction
 }): Promise<ProjectFileManager.ProjectFileManager> {
   const packageDir = await findWorkspacePackageDir({
     packageName: options.packageName,
@@ -50,6 +53,7 @@ export async function buildProject(options: {
   const projectFileManager = new ProjectFileManager.ProjectFileManager({
     sourcePackageName: options.packageName,
     entryFilePath: options.entryPointFilePath,
+    openFileMatcher: options.openFile,
   })
 
   const absoluteEntryPointFilePath = NodePath.resolve(
@@ -149,10 +153,6 @@ function addTypeScriptFiles({
         mountPath: fileMountPath,
         filePath: file.fileName,
       })
-
-      if (file.fileName === entryPointFilePath) {
-        projectFileManager.openFiles.push(fileMountPath)
-      }
     })
 
   const resolvedTsConfigJsonObject = getResolvedTsConfigJsonObject({

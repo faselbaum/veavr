@@ -6,32 +6,53 @@ type AddOptions<T> = T & {
   mountPath: string
 }
 
+export type OpenFileMatchFunction = (options: {
+  fileMountPath: string
+}) => boolean
+
 export class ProjectFileManager {
   #mountedFiles: Record<string, string> = {}
   #sourcePackageName: string = ''
   #openFiles: string[] = []
   #entryFilePath: string = ''
+  #openFileMatcher?: OpenFileMatchFunction = undefined
 
   public constructor(options: {
     sourcePackageName: string
     entryFilePath: string
+    openFileMatcher?: OpenFileMatchFunction
   }) {
     this.#sourcePackageName = options.sourcePackageName
     this.#entryFilePath = options.entryFilePath
+    this.#openFileMatcher = options.openFileMatcher
   }
 
-  get openFiles(): string[] {
+  get openFiles(): ReadonlyArray<string> {
     return this.#openFiles
   }
 
-  addVirtualFile({
+  #addFile({
     mountPath,
     fileContent,
-  }: {
-    mountPath: string
-    fileContent: string
-  }) {
+  }: AddOptions<{ fileContent: string }>): void {
     this.#mountedFiles[mountPath] = fileContent
+
+    if (mountPath === this.#entryFilePath) {
+      this.#openFiles = [mountPath, ...this.#openFiles]
+    } else if (
+      this.#openFileMatcher &&
+      this.#openFileMatcher({ fileMountPath: mountPath })
+    ) {
+      this.#openFiles = [...this.#openFiles, mountPath]
+    }
+  }
+
+  addVirtualFile(
+    options: AddOptions<{
+      fileContent: string
+    }>
+  ) {
+    this.#addFile(options)
   }
 
   addFile({
@@ -41,7 +62,7 @@ export class ProjectFileManager {
     filePath: string
   }>): void {
     const fileContent = NodeFs.readFileSync(filePath).toString()
-    this.#mountedFiles[mountPath] = fileContent
+    this.#addFile({ mountPath, fileContent })
   }
 
   addDir({ dirPath, mountPath }: AddOptions<{ dirPath: string }>): void {
@@ -50,7 +71,10 @@ export class ProjectFileManager {
     for (const filePath of files) {
       const mountedFilePath = NodePath.join(mountPath, filePath)
       const absoluteFilePath = NodePath.resolve(dirPath, './', filePath)
-      this.addFile({ filePath: absoluteFilePath, mountPath: mountedFilePath })
+      this.addFile({
+        filePath: absoluteFilePath,
+        mountPath: mountedFilePath,
+      })
     }
   }
 
@@ -65,7 +89,7 @@ export class ProjectFileManager {
       export const projectFiles: Stackblitz.ProjectFiles = ${JSON.stringify(this.#mountedFiles)}
 
       export const projectOptions: Stackblitz.EmbedOptions = {
-        openFile: ${JSON.stringify(this.#openFiles)}
+        openFile: ${JSON.stringify(this.openFiles.join(','))}
       }
     `
 

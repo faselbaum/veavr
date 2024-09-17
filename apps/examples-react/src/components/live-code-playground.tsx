@@ -1,5 +1,16 @@
 import * as React from 'react'
 import * as StackblitzSdk from '@stackblitz/sdk'
+import styled from '@emotion/styled'
+
+const LiveCodeRoot = styled.div`
+  height: 40vw;
+  display: flex;
+  align-items: stretch;
+
+  & iframe {
+    border: none;
+  }
+`
 
 export type ShowCaseModule = {
   projectFiles: StackblitzSdk.ProjectFiles
@@ -13,6 +24,7 @@ export type LiveCodePlaygroundProps = {
 export const LiveCodePlayground: React.FunctionComponent<
   LiveCodePlaygroundProps
 > = (props) => {
+  const hostId = `stackblitz-host-${React.useId()}`
   const [module, setModule] = React.useState<ShowCaseModule | undefined>(
     undefined
   )
@@ -34,7 +46,7 @@ export const LiveCodePlayground: React.FunctionComponent<
     }
 
     StackblitzSdk.default.embedProject(
-      'stackblitz_host',
+      hostId,
       {
         template: 'node',
         files: module.projectFiles,
@@ -49,8 +61,8 @@ export const LiveCodePlayground: React.FunctionComponent<
   }, [module])
 
   return (
-    <div style={{ height: '40vw', display: 'flex', alignItems: 'stretch' }}>
-      <div id="stackblitz_host" />
-    </div>
+    <LiveCodeRoot>
+      <div id={hostId} />
+    </LiveCodeRoot>
   )
 }

@@ -1,5 +1,6 @@
 import { Canvas } from '@storybook/blocks'
 import { SourceCode } from '../../src/components/source-code'
+import { LiveCodePlayground } from '../../src/components/live-code-playground'
 
 import * as Stories from './getting-started.stories'
 
@@ -31,36 +32,39 @@ npm install "@veavr/react" --save
 **This package is provided as ESM only and as such requires**
 
 - **Server**: an ESM + CJS compatible runtime with standard `react` **OR** the use of a bundler.
-- **Client**: an ESM compatible runtime plus an ESM drop-in replacement of react, such as `https://esm.sh/react`,
-  **OR** the use of a bundler
+- **Client**: an ESM compatible runtime plus an ESM drop-in replacement of react, such as `https://esm.sh/react`, **OR** the use of a bundler
 
 ## Premise
 
 Let's start by examining this simple counter component.
 
-<SourceCode code={counterCode} regionNames={['component']} />
+<LiveCodePlayground
+  module={
+    import(
+      '../../src/stackblitz-projects/@veavr/react-components/src/components/counter-plain/showcase.plain.project.generated'
+    )
+  }
+/>
 
 <Canvas of={Stories.CounterStory} />
 
-Now as you can see, the `onIncrease | onDecrease` callbacks are bound only to
-their respective buttons, effectively disabling keyboard functionality for the
-number input and putting our component users at a loss. There's also no `id`
-property passed to the input field making form labels unable to link to the
-field using the `for` attribute. Of course we could explicitly add these properties to
-our component - but this can quickly get inconsistent, especially with a large component library.
-Let's instead make use of veavr and be prepared for these sort of cases.
+Now as you can see, the `onIncrease | onDecrease` callbacks are bound only to their respective buttons, effectively disabling keyboard functionality for the number input and putting our component users at a loss. There's also no `id` property passed to the input field making form labels unable to link to the field using the `for` attribute. Of course we could explicitly add these properties to our component - but this can quickly get inconsistent, especially with a large component library. Let's instead make use of veavr and be prepared for these sort of cases.
 
-> Note: veavr does not absolve you from properly implementing your components but it provides an escape hatch for consumers
-> until an improved component version is released.
+> Note: veavr does not absolve you from properly implementing your components but it provides an escape hatch for consumers until an improved component version is released.
 
 ## Writing Your First veavr Component
 
 Here is the same component, re-written using veavr.
 
-<SourceCode code={veavrCounterCode} regionNames={['component']} />
+<LiveCodePlayground
+  module={
+    import(
+      '../../src/stackblitz-projects/@veavr/react-components/src/components/counter/showcase.plain.project.generated'
+    )
+  }
+/>
 
-As you can see it is quite a bit more code but don't let this discourage you as this enables an unprecedented amount of flexibility for this component.
-Let's go over the various sections in more detail.
+As you can see it is quite a bit more code but don't let this discourage you as this enables an unprecedented amount of flexibility for this component. Let's go over the various sections in more detail.
 
 1. Define your component props as usual
 2. Declare and name the parts your component uses during rendering. Each part can either be a standard html tag name or any custom component type and can be replaced by consumers if needed.
@@ -69,11 +73,7 @@ Let's go over the various sections in more detail.
 
 ## What Can Users Do With This?
 
-Now that our Counter component is built with veavr, our users get access to the `$vvr` prop,
-which they can use to assign props to any of our internal parts.
-Since the component is clearly missing essential features let's try to patch those in using
-the `$vvr` prop. How about we add the missing keyboard functionality and make it possible for
-label elements to jump directly to the input by adding an id?
+Now that our Counter component is built with veavr, our users get access to the `$vvr` prop, which they can use to assign props to any of our internal parts. Since the component is clearly missing essential features let's try to patch those in using the `$vvr` prop. How about we add the missing keyboard functionality and make it possible for label elements to jump directly to the input by adding an id?
 
 <SourceCode
   code={veavrCounterCode}
@@ -87,14 +87,8 @@ Here's the result
 
 Now try clicking the label to focus the input field and use the up / down arrow keys.
 
-Awesome! As a user we were able to add the required properties on the fly and
-can continue with our use case until the day the component officially meets
-our requirements. The best thing about this approach is that the properties we assign here
-didn't even have to be explicitly defined by the component author. We can attach
-or override any property of any part.
+Awesome! As a user we were able to add the required properties on the fly and can continue with our use case until the day the component officially meets our requirements. The best thing about this approach is that the properties we assign here didn't even have to be explicitly defined by the component author. We can attach or override any property of any part.
 
-This should give you a glimpse of what you can do with veavr. There are many more advanced use cases
-which involve state, replacing parts or generating props for a collection of elements.
-Those topics will be covered on dedicated pages. You're welcome to explore.
+This should give you a glimpse of what you can do with veavr. There are many more advanced use cases which involve state, replacing parts or generating props for a collection of elements. Those topics will be covered on dedicated pages. You're welcome to explore.
 
 - [Next Up: Attaching vs. Overriding Props](?path=/docs/react-attaching-vs-overriding-props--docs)

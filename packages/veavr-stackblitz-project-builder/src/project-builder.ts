@@ -15,7 +15,6 @@ export async function buildProjects(options: {
   packageName: string
   entryPointFileGlob: string[]
   additionalSourceFilesGlob?: string[]
-  openFile?: ProjectFileManager.OpenFileMatchFunction
 }): Promise<ProjectFileManager.ProjectFileManager[]> {
   const packageDir = await findWorkspacePackageDir({
     packageName: options.packageName,
@@ -31,7 +30,6 @@ export async function buildProjects(options: {
       entryPointFilePath: filePath,
       additionalSourceFilesGlob: options.additionalSourceFilesGlob,
       packageName: options.packageName,
-      openFile: options.openFile,
     })
 
     result.push(projectManager)
@@ -44,7 +42,6 @@ export async function buildProject(options: {
   packageName: string
   entryPointFilePath: string
   additionalSourceFilesGlob?: string[]
-  openFile?: ProjectFileManager.OpenFileMatchFunction
 }): Promise<ProjectFileManager.ProjectFileManager> {
   const packageDir = await findWorkspacePackageDir({
     packageName: options.packageName,
@@ -54,7 +51,6 @@ export async function buildProject(options: {
     sourcePackageName: options.packageName,
     sourcePackageDirPath: packageDir!,
     entryFilePath: options.entryPointFilePath,
-    openFileMatcher: options.openFile,
   })
 
   const absoluteEntryPointFilePath = NodePath.resolve(

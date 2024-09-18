@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as StackblitzSdk from '@stackblitz/sdk'
+import * as StackblitzProjectBuilder from '@veavr/stackblitz-project-builder'
 import styled from '@emotion/styled'
 
 const LiveCodeRoot = styled.div`
@@ -12,36 +13,31 @@ const LiveCodeRoot = styled.div`
   }
 `
 
-export type ShowCaseModule = {
-  projectFiles: StackblitzSdk.ProjectFiles
-  projectOptions: StackblitzSdk.ProjectOptions
-}
-
 export type LiveCodePlaygroundProps = {
-  module: Promise<ShowCaseModule>
+  module: Promise<StackblitzProjectBuilder.ProjectModule>
 }
 
 export const LiveCodePlayground: React.FunctionComponent<
   LiveCodePlaygroundProps
 > = (props) => {
   const hostId = `stackblitz-host-${React.useId()}`
-  const [module, setModule] = React.useState<ShowCaseModule | undefined>(
-    undefined
-  )
+  const [project, setProject] = React.useState<
+    StackblitzProjectBuilder.CompiledProject | undefined
+  >(undefined)
 
   React.useEffect(() => {
     async function loadModule() {
       const loaded = await props.module
-      setModule(loaded)
+      setProject(loaded.default)
     }
 
-    if (!module) {
+    if (!project) {
       loadModule()
     }
   }, [props.module])
 
   React.useEffect(() => {
-    if (!module) {
+    if (!project) {
       return
     }
 
@@ -49,16 +45,16 @@ export const LiveCodePlayground: React.FunctionComponent<
       hostId,
       {
         template: 'node',
-        files: module.projectFiles,
+        files: project.projectFiles,
         title: 'veavr Playground',
       },
       {
-        ...module.projectOptions,
+        openFile: project.entryPointMountPath,
         startScript: 'dev',
         terminalHeight: 0,
       }
     )
-  }, [module])
+  }, [project])
 
   return (
     <LiveCodeRoot>

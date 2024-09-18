@@ -1,34 +1,35 @@
 import * as NodePath from 'node:path'
 import * as NodeFs from 'node:fs'
 import * as Glob from 'glob'
+import * as Stackblitz from '@stackblitz/sdk'
 
 type AddOptions<T> = T & {
   mountPath: string
 }
 
-export type OpenFileMatchFunction = (options: {
-  fileMountPath: string
-  entryPointFileMountPath: string
-}) => boolean
+export type CompiledProject = {
+  projectFiles: Stackblitz.ProjectFiles
+  entryPointMountPath: string
+}
+
+export type ProjectModule = {
+  default: CompiledProject
+}
 
 export class ProjectFileManager {
   #mountedFiles: Record<string, string> = {}
   #sourcePackageName: string = ''
   #sourcePackageDirPath: string = ''
-  #openFiles: string[] = []
   #entryFilePath: string = ''
-  #openFileMatcher?: OpenFileMatchFunction = undefined
 
   public constructor(options: {
     sourcePackageName: string
     sourcePackageDirPath: string
     entryFilePath: string
-    openFileMatcher?: OpenFileMatchFunction
   }) {
     this.#sourcePackageName = options.sourcePackageName
     this.#sourcePackageDirPath = options.sourcePackageDirPath
     this.#entryFilePath = options.entryFilePath
-    this.#openFileMatcher = options.openFileMatcher
   }
 
   get sourcePackageName(): string {
@@ -39,26 +40,11 @@ export class ProjectFileManager {
     return this.#sourcePackageDirPath
   }
 
-  get openFiles(): ReadonlyArray<string> {
-    return this.#openFiles
-  }
-
   #addFile({
     mountPath,
     fileContent,
   }: AddOptions<{ fileContent: string }>): void {
     this.#mountedFiles[mountPath] = fileContent
-
-    if (
-      (this.#openFileMatcher &&
-        this.#openFileMatcher({
-          fileMountPath: mountPath,
-          entryPointFileMountPath: this.#entryFilePath,
-        })) ||
-      mountPath === this.#entryFilePath
-    ) {
-      this.#openFiles = [...this.#openFiles, mountPath]
-    }
   }
 
   addVirtualFile(
@@ -97,14 +83,17 @@ export class ProjectFileManager {
   }
 
   writeProjectModule(options: { outDir: string }): void {
+    const compiledProject: CompiledProject = {
+      entryPointMountPath: this.#entryFilePath,
+      projectFiles: this.#mountedFiles,
+    }
+
     const fileContent = `
-      import * as Stackblitz from '@stackblitz/sdk'
+      import { CompiledProject } from '@veavr/stackblitz-project-builder'
 
-      export const projectFiles: Stackblitz.ProjectFiles = ${JSON.stringify(this.#mountedFiles)}
-
-      export const projectOptions: Stackblitz.ProjectOptions = {
-        openFile: ${JSON.stringify(this.openFiles.join(','))}
-      }
+      const project = ${JSON.stringify(compiledProject, undefined, 2)} satisfies CompiledProject
+      
+      export default project
     `
 
     const outDir = NodePath.resolve(

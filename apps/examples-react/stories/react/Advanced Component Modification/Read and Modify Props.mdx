@@ -1,15 +1,13 @@
 import { Canvas } from '@storybook/blocks'
 import { SourceCode } from '../../../src/components/source-code'
+import { LiveCodePlaygroundButton } from '../../../src/components/live-code-playground-button'
 
 import * as Stories from './read-and-modify-props.stories'
-import cardComponentCode from '../../../../../packages/veavr-react-components/src/components/card-veave-part-props.tsx?raw'
+import ComponentSourceCode from '../../../../../packages/veavr-react-components/src/components/card-veave-part-props/component.tsx?raw'
 
 # Advanced - Read and Modify Props
 
-Sometimes it's crucial to know, what props would get assigned by the component
-you're trying to modify before your modifications are applied.
-This is where the `.bindProps()` function comes in. It allows you to inspect
-the part props of your target component and conditionally apply your own props in return.
+Sometimes it's crucial to know, what props would get assigned by the component you're trying to modify before your modifications are applied. This is where the `.bindProps()` function comes in. It allows you to inspect the part props of your target component and conditionally apply your own props in return.
 
 ## Example
 
@@ -18,7 +16,15 @@ We're going to make the following modifications to the `Card` component:
 - When an image url is provided through the `img` prop, the card will always adopt the `medium` variant.
 - The overlay should always be expanded if the `variant` is `small`.
 
-<SourceCode code={cardComponentCode} regionNames={['component']} />
+<SourceCode code={ComponentSourceCode} />
+<LiveCodePlaygroundButton
+  module={() =>
+    import(
+      '../../../src/stackblitz-projects/@veavr/react-components/src/components/card-veave-part-props/application.plain.project.generated'
+    )
+  }
+  open="component"
+/>
 
 And here is the result of our modifications
 

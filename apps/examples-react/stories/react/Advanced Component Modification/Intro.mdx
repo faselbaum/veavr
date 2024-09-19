@@ -1,20 +1,17 @@
 import { Canvas } from '@storybook/blocks'
 import { SourceCode } from '../../../src/components/source-code'
+import { LiveCodePlaygroundButton } from '../../../src/components/live-code-playground-button'
 
 import * as Stories from './intro.stories'
-import cardComponentCode from '../../../../../packages/veavr-react-components/src/components/card.tsx?raw'
+import CardSourceCode from '../../../../../packages/veavr-react-components/src/components/card/component.tsx?raw'
 
 # Advanced Component Modification
 
-We covered the very simple use case of statically attaching or overriding props [here](?path=/docs/react-attaching-vs-overriding-props--docs).
-Now we'll take a look into veavr's more advanced features offered by the `.veave()` function which is exposed by any veavr component.
+We covered the very simple use case of statically attaching or overriding props [here](?path=/docs/react-attaching-vs-overriding-props--docs). Now we'll take a look into veavr's more advanced features offered by the `.veave()` function which is exposed by any veavr component.
 
 ## The .veave() Function
 
-A veavr component's `.veave()` function is almost identical to the `veavr()`
-function that's being used to build and define a veavr component initially.
-It is used to extend a veavr component in a much more fine grained and controlled manner
-and create a new re-usable standalone component with modifications in place.
+A veavr component's `.veave()` function is almost identical to the `veavr()` function that's being used to build and define a veavr component initially. It is used to extend a veavr component in a much more fine grained and controlled manner and create a new re-usable standalone component with modifications in place.
 
 ### What Can You Do With It?
 
@@ -23,14 +20,20 @@ and create a new re-usable standalone component with modifications in place.
 - Read and modify internal component state.
 - Transform a components public interface.
 
-To showcase each of the mentioned features we will start with a basic
-veavr component and slowly **veave** features into it.
-Our starting point will be this very simple card component.
+To showcase each of the mentioned features we will start with a basic veavr component and slowly **veave** features into it. Our starting point will be this very simple card component.
 
 <Canvas of={Stories.CardStory} />
 
 And here's the code for it.
 
-<SourceCode code={cardComponentCode} regionNames={['component']} />
+<SourceCode code={CardSourceCode} />
+<LiveCodePlaygroundButton
+  module={() =>
+    import(
+      '../../../src/stackblitz-projects/@veavr/react-components/src/components/card/application.plain.project.generated'
+    )
+  }
+  open="both"
+/>
 
 - [Next Up: Advanced - Read And Modify Props](?path=/docs/react-advanced-component-modification-read-and-modify-props--docs)

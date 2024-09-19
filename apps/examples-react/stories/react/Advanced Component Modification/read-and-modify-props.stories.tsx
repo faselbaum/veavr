@@ -1,21 +1,16 @@
 import { Meta, StoryFn } from '@storybook/react'
 
-import { RenderCards } from '@veavr/react-components/components/card-veave-part-props.js'
+import * as ApplicationPlain from '@veavr/react-components/components/card-veave-part-props/application.plain.js'
 
-import CardSourceCode from '../../../../../packages/veavr-react-components/src/components/card-veave-part-props.tsx?raw'
-import { getCodeFromRegions } from '~/src/components/source-code'
+import ApplicationPlainSourceCode from '../../../../../packages/veavr-react-components/src/components/card-veave-part-props/application.plain.tsx?raw'
 
 export default {} satisfies Meta
 
-export const CardStory: StoryFn = () => <RenderCards />
+export const CardStory: StoryFn = () => <ApplicationPlain.Application />
 CardStory.parameters = {
   docs: {
     source: {
-      code: getCodeFromRegions({
-        code: CardSourceCode,
-        regionNames: ['usage - render cards'],
-        includeImports: false,
-      }),
+      code: ApplicationPlainSourceCode,
     },
   },
 }

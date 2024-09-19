@@ -7,7 +7,8 @@ export type Props = {
   variant?: 'small' | 'medium'
 }
 
-export type State = {
-  title: () => string
-  variant: () => Exclude<Props['variant'], undefined>
+export const defaultProps: Props = {
+  img: 'https://picsum.photos/800/600',
+  title: 'Awesome Card',
+  body: "I'm a veavr component ready to be customized.",
 }

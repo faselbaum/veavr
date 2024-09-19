@@ -1,8 +1,9 @@
 import { Canvas } from '@storybook/blocks'
 import { SourceCode } from '../../src/components/source-code'
+import { LiveCodePlaygroundButton } from '../../src/components/live-code-playground-button'
 
 import * as Stories from './generating-props-for-element-collections.stories'
-import sliderVeavrCode from '../../../../packages/veavr-react-components/src/components/slider-veavr.tsx?raw'
+import SliderSourceCode from '../../../../packages/veavr-react-components/src/components/slider/component.tsx?raw'
 
 # Generating Props for Element Collections
 
@@ -14,34 +15,56 @@ For this scenario veavr offers the concept of **props generator** functions whic
 
 Let's take this simple image slider component for example. Here we generate a set of `<img>` elements for each url present in the `imgUrls` prop.
 
-<Canvas of={Stories.RenderOriginalStory} />
+<Canvas of={Stories.PlainStory} />
 
 ## Implementation
 
 Let's take a look at how the slider is implemented.
 
-<SourceCode code={sliderVeavrCode} regionNames={['component']} />
-
-<Canvas of={Stories.SliderPartsStory} />
+<SourceCode code={SliderSourceCode} />
+<LiveCodePlaygroundButton
+  module={() =>
+    import(
+      '../../src/stackblitz-projects/@veavr/react-components/src/components/slider/application.plain.project.generated'
+    )
+  }
+  open="component"
+/>
 
 ## Consumer Side
 
 On the consumer side **props generators** are largely invisble. Attaching and overriding props on a part, which uses a props generator, works the same as for any statically created element - plus an additional option to more specifically target generated elements.
 
-### Static Props Enrichment
+### Uniform Props Assignment
 
 When normally assigning a value to a property of any internal part using the `$vvr` property, those values will be uniformly attached to / overriden on all generated instances of that part.
 
 Here **every** `Slide` part will receive a style attribute which sets an inverted filter.
 
-<Canvas of={Stories.StaticOverrideStory} />
+<Canvas of={Stories.UniformOverrideStory} />
+<LiveCodePlaygroundButton
+  module={() =>
+    import(
+      '../../src/stackblitz-projects/@veavr/react-components/src/components/slider/application.uniform-override.project.generated'
+    )
+  }
+  open="application"
+/>
 
-### Conditional Props Enrichment
+### Conditional Props Assignment
 
 If you want to target a specific element in a collection you can bind your own props generator function to the related part via the `$vvr` property. The way your resulting object merges with internally assigned props depends on whether you passed the function to the `attach` prop or the `override` prop.
 
 In this example we target **every second** `Slide` element to give it a nice pink hue.
 
 <Canvas of={Stories.ConditionalOverrideStory} />
+<LiveCodePlaygroundButton
+  module={() =>
+    import(
+      '../../src/stackblitz-projects/@veavr/react-components/src/components/slider/application.conditional-override.project.generated'
+    )
+  }
+  open="application"
+/>
 
 - [Next Up: Advanced Component Modification](?path=/docs/react-advanced-component-modification-intro--docs)

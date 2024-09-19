@@ -12,6 +12,7 @@
     "./LICENSE"
   ],
   "exports": {
+    "./package.json": "./package.json",
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
@@ -26,9 +27,6 @@
     "build": "wireit"
   },
   "dependencies": {
-    "vite": "^5.4.1",
-    "@vitejs/plugin-react": "^4.3.1",
-    "vite-tsconfig-paths": "^5.0.1",
     "@emotion/styled": "^11.13.0",
     "@emotion/react": "^11.13.0",
     "emotion-reset": "^3.0.1",

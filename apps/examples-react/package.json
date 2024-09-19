@@ -21,25 +21,50 @@
     "@emotion/react": "^11.13.0",
     "emotion-reset": "^3.0.1",
     "@types/react": "^18.3.3",
+    "@types/node": "^22.5.5",
     "react": "^18.3.1",
+    "@stackblitz/sdk": "^1.11.0",
     "@veavr/react-components": "workspace:*",
-    "@veavr/react": "workspace:*"
+    "@veavr/react": "workspace:*",
+    "@veavr/stackblitz-project-builder": "workspace:*"
   },
   "scripts": {
+    "generate": "wireit",
+    "generate:watch": "wireit",
     "dev": "wireit",
     "build:storybook": "wireit"
   },
   "wireit": {
+    "generate:watch": {
+      "command": "pnpm run generate --watch",
+      "service": true
+    },
+    "generate": {
+      "command": "tsx ./scripts/generate.ts",
+      "dependencies": [
+        "../../packages/veavr-stackblitz-project-builder:build",
+        "../../packages/veavr-react-components:build"
+      ],
+      "files": [
+        "./scripts/generate.ts"
+      ],
+      "output": [
+        "./src/stackblitz-projects/**/*"
+      ]
+    },
     "dev": {
       "command": "storybook dev -p 6006",
       "dependencies": [
-        "../../packages/veavr-react-components:dev"
+        "generate:watch",
+        "../../packages/veavr-react-components:dev",
+        "../../packages/veavr-stackblitz-project-builder:dev"
       ],
       "service": true
     },
     "build:storybook": {
       "command": "storybook build",
       "dependencies": [
+        "generate",
         "../../packages/veavr-react-components:build"
       ],
       "files": [

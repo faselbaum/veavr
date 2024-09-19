@@ -1,0 +1,66 @@
+{
+  "name": "@veavr/stackblitz-project-builder",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "https://github.com/faselbaum",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "./dist/",
+    "./LICENSE"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*",
+      "default": "./dist/*"
+    }
+  },
+  "scripts": {
+    "dev": "wireit",
+    "build": "wireit"
+  },
+  "dependencies": {
+    "@stackblitz/sdk": "^1.11.0",
+    "typescript": "^5.5.3",
+    "tsconfig-loader": "^1.1.0",
+    "find-up": "^7.0.0",
+    "ts-deepmerge": "^7.0.1",
+    "tar": "^7.4.3",
+    "glob": "^11.0.0",
+    "@pnpm/find-workspace-dir": "^7.0.1",
+    "@pnpm/find-workspace-packages": "^6.0.9"
+  },
+  "devDependencies": {
+    "type-fest": "^4.25.0",
+    "@types/node": "^22.5.5"
+  },
+  "wireit": {
+    "dev": {
+      "command": "pnpm run build --watch",
+      "dependencies": [
+        "build"
+      ],
+      "service": true
+    },
+    "build": {
+      "command": "tspc --build ./tsconfig.json",
+      "files": [
+        "./src/**/*",
+        "../../tsconfig.base.json",
+        "./tsconfig.json"
+      ],
+      "output": [
+        "./dist/**/*",
+        "./.tsbuildinfo"
+      ],
+      "clean": "if-file-deleted"
+    }
+  }
+}

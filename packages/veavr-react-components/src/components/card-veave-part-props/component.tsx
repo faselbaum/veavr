@@ -1,10 +1,4 @@
-//#region imports
-
-import { Card as BaseCard } from './card.js'
-
-//#endregion
-
-//#region component
+import { Card as BaseCard } from '../card/component.js'
 
 //           Card will be a new veavr component with our modifications
 //           applying to all instances.
@@ -41,23 +35,3 @@ export const Card = BaseCard.veave()({
     })
   },
 })
-
-//#endregion
-
-//#region usage - render cards
-
-export const RenderCards = () => (
-  <>
-    <Card variant="small" title="Small Variant" body="I am now always open" />
-    <Card
-      variant="small"
-      img="https://picsum.photos/800/600"
-      title="Medium Variant"
-      body={`I have the medium variant even though 'small' is passed to the variant prop.
-        There's just not enough space for an image on small cards. 
-        Also my overlay functions as before.`}
-    />
-  </>
-)
-
-//#endregion

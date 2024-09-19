@@ -1,33 +1,34 @@
 import { Canvas } from '@storybook/blocks'
 import { SourceCode } from '../../../src/components/source-code'
+import { LiveCodePlaygroundButton } from '../../../src/components/live-code-playground-button'
 
 import * as Stories from './swapping-parts.stories'
-import cardComponentCode from '../../../../../packages/veavr-react-components/src/components/card-veave-parts.tsx?raw'
+import ComponentSourceCode from '../../../../../packages/veavr-react-components/src/components/card-veave-parts/component.tsx?raw'
+import ComponentPartsSourceCode from '../../../../../packages/veavr-react-components/src/components/card-veave-parts/parts.tsx?raw'
 
 # Advanced - Swapping Parts
 
-veavr components allow you to swap out internal parts.
-This is useful if you need to insert new elements into the pre-existing markup structure,
-but it also allows you to hide or replace existing ones.
+veavr components allow you to swap out internal parts. This is useful if you need to insert new elements into the pre-existing markup structure, but it also allows you to hide or replace existing ones.
 
 > Note: The API is still fairly basic but with a few tricks you should still be able to cover almost every use case.
 
 ## Example
 
-Last time we added some state to toggle the overlay of our card component.
-Let's continue there and modify the appearance of the overlay title a bit
-by adding an arrow icon right next to it. This arrow should serve as visual indicator to the user.
+Last time we added some state to toggle the overlay of our card component. Let's continue there and modify the appearance of the overlay title a bit by adding an arrow icon right next to it. This arrow should serve as visual indicator to the user.
 
-Let's first prepare the part to swap out. We're going to replace the `Title` part with a custom component called `CustomTitle`.
+Let's presume we already prepared a replacement component, called `CustomTitle`, for the `Title` part . All that's left to do is to plug it into the `Card` component's `Title` slot and assign any newly required property values to said part.
 
-<SourceCode code={cardComponentCode} regionNames={['custom title']} />
+> You can view the complete source by visiting the Example Playground
 
-Alright. Now that we have our custom title prepared we are ready to plug it into the `Card` component.
-
-<SourceCode code={cardComponentCode} regionNames={['component']} />
-
-And here is the result of our modifications
-
+<SourceCode code={ComponentSourceCode} />
 <Canvas of={Stories.CardStory} />
+<LiveCodePlaygroundButton
+  module={() =>
+    import(
+      '../../../src/stackblitz-projects/@veavr/react-components/src/components/card-veave-parts/application.plain.project.generated'
+    )
+  }
+  open="both"
+/>
 
 - [Next Up: Advanced - Augmenting the Public Interface](?path=/docs/react-advanced-component-modification-augmenting-the-public-interface--docs)

@@ -1,51 +1,31 @@
-import * as React from 'react'
 import { Meta, StoryFn } from '@storybook/react'
 
-import CardSourceCode from '../../../../packages/veavr-react-components/src/components/card.tsx?raw'
+import CardApplicationAttachPropsSourceCode from '../../../../packages/veavr-react-components/src/components/card/application.attach-props.tsx?raw'
+import CardApplicationOverridePropsSourceCode from '../../../../packages/veavr-react-components/src/components/card/application.override-props.tsx?raw'
 
-import {
-  Card,
-  AttachProps,
-  OverrideProps,
-} from '@veavr/react-components/components/card.js'
-import { getCodeFromRegions } from '~/src/components/source-code'
+import * as CardApplicationAttachProps from '@veavr/react-components/components/card/application.attach-props.js'
+import * as CardApplicationOverrideProps from '@veavr/react-components/components/card/application.override-props.js'
 
 export default {} satisfies Meta
 
-export const ComponentSourceStory: StoryFn = () => <></>
-ComponentSourceStory.parameters = {
-  docs: {
-    source: {
-      code: getCodeFromRegions({
-        code: CardSourceCode,
-        regionNames: ['component'],
-      }),
-    },
-  },
-}
-
-export const AttachPropsStory: StoryFn = () => <AttachProps />
+export const AttachPropsStory: StoryFn = () => (
+  <CardApplicationAttachProps.Application />
+)
 AttachPropsStory.parameters = {
   docs: {
     source: {
-      code: getCodeFromRegions({
-        code: CardSourceCode,
-        regionNames: ['usage - attach props'],
-        includeImports: false,
-      }),
+      code: CardApplicationAttachPropsSourceCode,
     },
   },
 }
 
-export const OverridePropsStory: StoryFn<typeof Card> = () => <OverrideProps />
+export const OverridePropsStory: StoryFn = () => (
+  <CardApplicationOverrideProps.Application />
+)
 OverridePropsStory.parameters = {
   docs: {
     source: {
-      code: getCodeFromRegions({
-        code: CardSourceCode,
-        regionNames: ['usage - override props'],
-        includeImports: false,
-      }),
+      code: CardApplicationOverridePropsSourceCode,
     },
   },
 }

@@ -1,13 +1,20 @@
 import { Canvas } from '@storybook/blocks'
 import { SourceCode } from '../../../src/components/source-code'
+import { LiveCodePlaygroundButton } from '../../../src/components/live-code-playground-button'
 
 import * as Stories from './augmenting-the-public-interface.stories'
-import cardComponentCode from '../../../../../packages/veavr-react-components/src/components/card-veave-augment-props.tsx?raw'
+import ComponentSourceCode from '../../../../../packages/veavr-react-components/src/components/card-veave-augment-props/component.tsx?raw'
 
 # Advanced - Augmenting The Public Interface
 
-<SourceCode code={cardComponentCode} regionNames={['parts']} />
-
-<SourceCode code={cardComponentCode} regionNames={['component']} />
+<SourceCode code={ComponentSourceCode} />
+<LiveCodePlaygroundButton
+  module={() =>
+    import(
+      '../../../src/stackblitz-projects/@veavr/react-components/src/components/card-veave-augment-props/application.plain.project.generated'
+    )
+  }
+  open="both"
+/>
 
 <Canvas of={Stories.CardStory} />

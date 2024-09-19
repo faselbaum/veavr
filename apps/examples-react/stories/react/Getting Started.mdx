@@ -1,6 +1,6 @@
 import { Canvas } from '@storybook/blocks'
 import { SourceCode } from '../../src/components/source-code'
-import { LiveCodePlayground } from '../../src/components/live-code-playground'
+import { LiveCodePlaygroundButton } from '../../src/components/live-code-playground-button'
 
 import * as Stories from './getting-started.stories'
 
@@ -38,13 +38,7 @@ npm install "@veavr/react" --save
 
 Let's start by examining this simple counter component.
 
-<LiveCodePlayground
-  module={
-    import(
-      '../../src/stackblitz-projects/@veavr/react-components/src/components/counter-plain/showcase.plain.project.generated'
-    )
-  }
-/>
+<SourceCode code={counterCode} regionNames={['component']} />
 
 <Canvas of={Stories.CounterStory} />
 
@@ -56,12 +50,14 @@ Now as you can see, the `onIncrease | onDecrease` callbacks are bound only to th
 
 Here is the same component, re-written using veavr.
 
-<LiveCodePlayground
-  module={
+<SourceCode code={veavrCounterCode} regionNames={['component']} />
+<LiveCodePlaygroundButton
+  module={() =>
     import(
       '../../src/stackblitz-projects/@veavr/react-components/src/components/counter/showcase.plain.project.generated'
     )
   }
+  open="component"
 />
 
 As you can see it is quite a bit more code but don't let this discourage you as this enables an unprecedented amount of flexibility for this component. Let's go over the various sections in more detail.
@@ -80,8 +76,14 @@ Now that our Counter component is built with veavr, our users get access to the 
   regionNames={['usage']}
   includeImports={false}
 />
-
-Here's the result
+<LiveCodePlaygroundButton
+  module={() =>
+    import(
+      '../../src/stackblitz-projects/@veavr/react-components/src/components/counter/showcase.plain.project.generated'
+    )
+  }
+  open="application"
+/>
 
 <Canvas of={Stories.CounterVeavrStory} sourceState="none" />
 

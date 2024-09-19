@@ -1,4 +1,4 @@
-import { defaultProps } from './showcase-common.js'
+import { defaultProps } from './types.js'
 
 // ˇ veavr component
 import { Card } from './component.js'

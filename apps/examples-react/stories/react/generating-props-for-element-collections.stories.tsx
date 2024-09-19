@@ -1,61 +1,42 @@
 import { Meta, StoryFn } from '@storybook/react'
 
-import * as SliderVeavr from '@veavr/react-components/components/slider-veavr.js'
+import * as SliderApplicationPlain from '@veavr/react-components/components/slider/application.plain.js'
+import * as SliderApplicationUniformOverride from '@veavr/react-components/components/slider/application.uniform-override.js'
+import * as SliderApplicationConditionalOverride from '@veavr/react-components/components/slider/application.conditional-override.js'
 
-import SliderVeavrSourceCode from '../../../../packages/veavr-react-components/src/components/slider-veavr.tsx?raw'
-import { getCodeFromRegions } from '~/src/components/source-code'
+import SliderApplicationPlainSourceCode from '../../../../packages/veavr-react-components/src/components/slider/application.plain.tsx?raw'
+import SliderApplicationUniformOverrideSourceCode from '../../../../packages/veavr-react-components/src/components/slider/application.uniform-override.tsx?raw'
+import SliderApplicationConditionalOverrideSourceCode from '../../../../packages/veavr-react-components/src/components/slider/application.conditional-override.tsx?raw'
 
 export default {} satisfies Meta
 
-export const SliderPartsStory: StoryFn = () => <>Show parts code.</>
-SliderPartsStory.parameters = {
+export const PlainStory: StoryFn = () => <SliderApplicationPlain.Application />
+PlainStory.parameters = {
   docs: {
     source: {
-      code: getCodeFromRegions({
-        code: SliderVeavrSourceCode,
-        regionNames: ['parts'],
-      }),
+      code: SliderApplicationPlainSourceCode,
     },
   },
 }
 
-export const RenderOriginalStory: StoryFn = () => <SliderVeavr.RenderOriginal />
-RenderOriginalStory.parameters = {
+export const UniformOverrideStory: StoryFn = () => (
+  <SliderApplicationUniformOverride.Application />
+)
+UniformOverrideStory.parameters = {
   docs: {
     source: {
-      code: getCodeFromRegions({
-        code: SliderVeavrSourceCode,
-        regionNames: ['usage - render original'],
-        includeImports: false,
-      }),
-    },
-  },
-}
-
-export const StaticOverrideStory: StoryFn = () => <SliderVeavr.StaticOverride />
-StaticOverrideStory.parameters = {
-  docs: {
-    source: {
-      code: getCodeFromRegions({
-        code: SliderVeavrSourceCode,
-        regionNames: ['usage - static override'],
-        includeImports: false,
-      }),
+      code: SliderApplicationUniformOverrideSourceCode,
     },
   },
 }
 
 export const ConditionalOverrideStory: StoryFn = () => (
-  <SliderVeavr.ConditionalOverride />
+  <SliderApplicationConditionalOverride.Application />
 )
 ConditionalOverrideStory.parameters = {
   docs: {
     source: {
-      code: getCodeFromRegions({
-        code: SliderVeavrSourceCode,
-        regionNames: ['usage - conditional override'],
-        includeImports: false,
-      }),
+      code: SliderApplicationConditionalOverrideSourceCode,
     },
   },
 }

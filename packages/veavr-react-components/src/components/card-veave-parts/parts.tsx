@@ -1,12 +1,6 @@
-//#region imports
-
-import { Card as BaseCard } from './card-veave-state.js'
-import * as BaseParts from './card/parts.js'
 import styled from '@emotion/styled'
 
-//#endregion
-
-//#region custom title
+import * as BaseParts from '../card/parts.js'
 
 export const TitleRoot = styled.div`
   display: flex;
@@ -58,36 +52,3 @@ export const CustomTitle: React.FunctionComponent<CustomTitleProps> = (
     </TitleRoot>
   )
 }
-
-//#endregion
-
-//#region component
-
-export const Card = BaseCard.veave()({
-  parts: {
-    Title: CustomTitle,
-  },
-  component: ({ veavr }) => {
-    return veavr.bindProps(({ state, baseAssignedProps }) => ({
-      ...baseAssignedProps,
-      Title: {
-        iconDirection: state.$overlayState === 'closed' ? 'up' : 'down',
-      },
-    }))
-  },
-})
-
-//#endregion
-
-//#region usage - render card
-
-export const RenderCard = () => (
-  <Card
-    variant="small"
-    img="https://picsum.photos/800/600"
-    title="Wow, New Icon!"
-    body={`This part didn't exist before.`}
-  />
-)
-
-//#endregion

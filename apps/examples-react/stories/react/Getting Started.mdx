@@ -4,8 +4,9 @@ import { LiveCodePlaygroundButton } from '../../src/components/live-code-playgro
 
 import * as Stories from './getting-started.stories'
 
-import counterCode from '../../../../packages/veavr-react-components/src/components/counter.tsx?raw'
-import veavrCounterCode from '../../../../packages/veavr-react-components/src/components/counter-veavr.tsx?raw'
+import CounterPlainSourceCode from '../../../../packages/veavr-react-components/src/components/counter-plain/component.tsx?raw'
+import CounterSourceCode from '../../../../packages/veavr-react-components/src/components/counter/component.tsx?raw'
+import CounterApplicationSourceCode from '../../../../packages/veavr-react-components/src/components/counter/application.plain.tsx?raw'
 
 # Getting Started
 
@@ -38,7 +39,7 @@ npm install "@veavr/react" --save
 
 Let's start by examining this simple counter component.
 
-<SourceCode code={counterCode} regionNames={['component']} />
+<SourceCode code={CounterPlainSourceCode} />
 
 <Canvas of={Stories.CounterStory} />
 
@@ -50,11 +51,11 @@ Now as you can see, the `onIncrease | onDecrease` callbacks are bound only to th
 
 Here is the same component, re-written using veavr.
 
-<SourceCode code={veavrCounterCode} regionNames={['component']} />
+<SourceCode code={CounterSourceCode} />
 <LiveCodePlaygroundButton
   module={() =>
     import(
-      '../../src/stackblitz-projects/@veavr/react-components/src/components/counter/showcase.plain.project.generated'
+      '../../src/stackblitz-projects/@veavr/react-components/src/components/counter/application.plain.project.generated'
     )
   }
   open="component"
@@ -71,15 +72,11 @@ As you can see it is quite a bit more code but don't let this discourage you as 
 
 Now that our Counter component is built with veavr, our users get access to the `$vvr` prop, which they can use to assign props to any of our internal parts. Since the component is clearly missing essential features let's try to patch those in using the `$vvr` prop. How about we add the missing keyboard functionality and make it possible for label elements to jump directly to the input by adding an id?
 
-<SourceCode
-  code={veavrCounterCode}
-  regionNames={['usage']}
-  includeImports={false}
-/>
+<SourceCode code={CounterApplicationSourceCode} />
 <LiveCodePlaygroundButton
   module={() =>
     import(
-      '../../src/stackblitz-projects/@veavr/react-components/src/components/counter/showcase.plain.project.generated'
+      '../../src/stackblitz-projects/@veavr/react-components/src/components/counter/application.plain.project.generated'
     )
   }
   open="application"

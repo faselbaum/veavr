@@ -1,40 +1,30 @@
 import { Meta, StoryFn } from '@storybook/react'
 
-import CounterSourceCode from '../../../../packages/veavr-react-components/src/components/counter.tsx?raw'
-import CounterVeavrSourceCode from '../../../../packages/veavr-react-components/src/components/counter-veavr.tsx?raw'
+import CounterPlainApplicationSourceCode from '../../../../packages/veavr-react-components/src/components/counter-plain/application.plain?raw'
+import CounterApplicationSourceCode from '../../../../packages/veavr-react-components/src/components/counter/application.plain?raw'
 
-import * as Counter from '@veavr/react-components/components/counter.js'
-import * as CounterVeavr from '@veavr/react-components/components/counter-veavr.js'
-import { getCodeFromRegions } from '~/src/components/source-code'
-
+import * as CounterPlain from '@veavr/react-components/components/counter-plain/application.plain.js'
+import * as Counter from '@veavr/react-components/components/counter/application.plain.js'
 export default {} satisfies Meta
 
 export const CounterStory: StoryFn = () => {
-  return <Counter.Application />
+  return <CounterPlain.Application />
 }
 CounterStory.parameters = {
   docs: {
     source: {
-      code: getCodeFromRegions({
-        code: CounterSourceCode,
-        regionNames: ['usage'],
-        includeImports: false,
-      }),
+      code: CounterPlainApplicationSourceCode,
     },
   },
 }
 
 export const CounterVeavrStory: StoryFn = () => {
-  return <CounterVeavr.Application />
+  return <Counter.Application />
 }
 CounterVeavrStory.parameters = {
   docs: {
     source: {
-      code: getCodeFromRegions({
-        code: CounterVeavrSourceCode,
-        regionNames: ['usage'],
-        includeImports: false,
-      }),
+      code: CounterApplicationSourceCode,
     },
   },
 }

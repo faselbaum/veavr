@@ -1,4 +1,4 @@
-import { defaultProps } from '../card/showcase-common.js'
+import { defaultProps } from '../card/types.js'
 import { Card } from './component.js'
 
 export const Application = () => (

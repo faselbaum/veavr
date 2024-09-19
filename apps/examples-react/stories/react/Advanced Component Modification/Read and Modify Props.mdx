@@ -17,17 +17,14 @@ We're going to make the following modifications to the `Card` component:
 - The overlay should always be expanded if the `variant` is `small`.
 
 <SourceCode code={ComponentSourceCode} />
+<Canvas of={Stories.CardStory} />
 <LiveCodePlaygroundButton
   module={() =>
     import(
       '../../../src/stackblitz-projects/@veavr/react-components/src/components/card-veave-part-props/application.plain.project.generated'
     )
   }
-  open="component"
+  open="both"
 />
-
-And here is the result of our modifications
-
-<Canvas of={Stories.CardStory} />
 
 - [Next Up: Advanced - Read and Modify State](?path=/docs/react-advanced-component-modification-read-and-modify-state--docs)

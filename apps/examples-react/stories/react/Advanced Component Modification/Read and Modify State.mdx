@@ -16,6 +16,7 @@ Internal state is an integral part of many ui components. To make components tru
 Let's start by introducing some state into our `Card` component. I'd prefer the overlay to stayed open / closed after the user clicked on it , as opposed to opening and closing on `:hover`.
 
 <SourceCode code={ComponentSourceCode} />
+<Canvas of={Stories.CardStory} />
 <LiveCodePlaygroundButton
   module={() =>
     import(
@@ -24,9 +25,5 @@ Let's start by introducing some state into our `Card` component. I'd prefer the 
   }
   open="both"
 />
-
-And here is the result of our modifications
-
-<Canvas of={Stories.CardStory} />
 
 - [Next Up: Advanced - Swapping Parts](?path=/docs/react-advanced-component-modification-swapping-parts--docs)

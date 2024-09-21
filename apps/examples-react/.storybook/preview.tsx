@@ -1,56 +1,14 @@
 import * as React from 'react'
 import { Preview } from '@storybook/react'
-import { ThemeProvider, Global, css } from '@emotion/react'
-import emotionReset from 'emotion-reset'
-import { DefaultTheme } from '@veavr/react-components/theme.js'
 import { DocsContainer, Markdown } from '@storybook/blocks'
 import { StoryLayout } from '~/src/components/layout.js'
 
 export default {
   decorators: [
     (storyFn, context) => (
-      <>
-        <Global
-          styles={css`
-            @layer veavr {
-              ${emotionReset}
-
-              *, *::after, *::before {
-                box-sizing: border-box;
-                -moz-osx-font-smoothing: grayscale;
-                -webkit-font-smoothing: antialiased;
-                font-smoothing: antialiased;
-              }
-            }
-          `}
-        ></Global>
-        {/* 
-        
-        Better use the following when css @scopes are more widely supported.
-        Also remove <style> tag from preview-head.html.
-
-        <Global
-          styles={css`
-            @scope (.sbdocs-preview .docs-story) {
-              ${emotionReset}
-
-              *, *::after, *::before {
-                box-sizing: border-box;
-                -moz-osx-font-smoothing: grayscale;
-                -webkit-font-smoothing: antialiased;
-                font-smoothing: antialiased;
-              }
-            }
-          `}
-        ></Global>
-        
-        */}
-        <ThemeProvider theme={DefaultTheme}>
-          <StoryLayout className="veavr" style={context.parameters.layout}>
-            {storyFn()}
-          </StoryLayout>
-        </ThemeProvider>
-      </>
+      <StoryLayout className="veavr" style={context.parameters.layout}>
+        {storyFn()}
+      </StoryLayout>
     ),
   ],
   parameters: {

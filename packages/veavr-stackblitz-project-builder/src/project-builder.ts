@@ -324,6 +324,52 @@ function addIndexHtml(options: {
 }): void {
   const indexHtml = `
     <html>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Playwrite+CU:wght@100..400&family=Roboto+Slab:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <style>
+          *, *::before, *::after {
+            box-sizing: border-box;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            font-smoothing: antialiased;
+          }
+          * {
+            margin: 0;
+          }
+          body {
+            line-height: 1.5;
+          }
+          img, picture, video, canvas, svg {
+            display: block;
+            max-width: 100%;
+          }
+          input, button, textarea, select {
+            font: inherit;
+          }
+          p, h1, h2, h3, h4, h5, h6 {
+            overflow-wrap: break-word;
+          }
+          #root, #__next {
+            isolation: isolate;
+          }
+        </style>
+        <style>
+          #root {
+            padding: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+
+            align-items: end;
+            justify-content: space-evenly;
+          }
+        </style>
+      </head>
       <body>
         <div id="root"></div>
         <script type="module" src="./src/mount.tsx"></script>
@@ -342,9 +388,9 @@ function addMountScript(options: {
   projectFileManager: ProjectFileManager.ProjectFileManager
 }): void {
   const mountScript = `
-    import { createRoot } from "react-dom/client";
+    import { createRoot } from "react-dom/client";    
     import { Application } from "../${options.entryFileMountPoint}";
-    
+
     const root = createRoot(document.querySelector('#root')!);
     root.render(<Application />);
   `

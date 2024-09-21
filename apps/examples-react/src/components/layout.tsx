@@ -1,13 +1,10 @@
 import styled from '@emotion/styled'
 
-export const StoryLayout = styled.div<{ 'min-width'?: string }>`
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(${(props) => props['min-width'] ?? '320px'}, 1fr)
-  );
-  gap: 32px;
+export const StoryLayout = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 
-  justify-items: center;
   align-items: end;
+  justify-content: space-evenly;
 `

@@ -13,7 +13,7 @@ export const Root = styled.div<Types.RootProps>`
   background-image: url(${(props) => props.imgUrl});
   background-size: cover;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 8px -4px;
-  border-radius: ${(props) => props.theme['border-radius']};
+  border-radius: 12px;
 
   :hover {
     --overlay-show: 1fr;

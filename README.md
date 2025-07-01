@@ -1,4 +1,4 @@
-![Static Badge](https://img.shields.io/badge/-%F0%9F%A4%8D-blue?style=for-the-badge&logo=typescript&logoColor=white&logoSize=auto) ![GitHub branch check runs](https://img.shields.io/github/check-runs/faselbaum/veavr/main?style=for-the-badge)
+[![Static Badge](https://img.shields.io/badge/-%F0%9F%A4%8D-blue?style=for-the-badge&logo=typescript&logoColor=white&logoSize=auto)]() [![GitHub branch check runs](https://img.shields.io/github/check-runs/faselbaum/veavr/main?style=for-the-badge)]()
 
 # veavr
 
@@ -32,7 +32,7 @@ To get started check out the respective guide for your ui library / framework.
 
 |  |  |  |
 | --- | --- | --- |
-| **React** | [Getting Started With React](https://faselbaum.github.io/veavr/?path=/docs/react-getting-started--docs) | ![NPM Version](https://img.shields.io/npm/v/%40veavr%2Freact?style=flat-square&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2F%40veavr%2Freact) |
+| **React** | [Getting Started With React](https://faselbaum.github.io/veavr/?path=/docs/react-getting-started--docs) | [![NPM Version](https://img.shields.io/npm/v/%40veavr%2Freact?style=flat-square&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2F%40veavr%2Freact)](https://www.npmjs.com/package/@veavr/react) |
 
 ## Why veavr? - Component Library Maintainers
 

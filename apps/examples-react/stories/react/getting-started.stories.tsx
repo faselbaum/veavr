@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react-vite'
 
 import CounterPlainApplicationSourceCode from '../../../../packages/veavr-react-components/src/components/counter-plain/application.plain?raw'
 import CounterApplicationSourceCode from '../../../../packages/veavr-react-components/src/components/counter/application.plain?raw'

@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react-vite'
 
 import * as CardApplicationPlain from '@veavr/react-components/components/card/application.plain.js'
 

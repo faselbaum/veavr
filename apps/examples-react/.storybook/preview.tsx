@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Preview } from '@storybook/react'
-import { DocsContainer, Markdown } from '@storybook/blocks'
+import { Preview } from '@storybook/react-vite'
+import { DocsContainer, Markdown } from '@storybook/addon-docs/blocks'
 import { StoryLayout } from '~/src/components/layout.js'
 
 export default {

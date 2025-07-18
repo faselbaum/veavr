@@ -1,4 +1,4 @@
-import { Source } from '@storybook/blocks'
+import { Source } from '@storybook/addon-docs/blocks'
 import * as React from 'react'
 
 export type SourceCodeProps = GetCodeFromRegionsArgs

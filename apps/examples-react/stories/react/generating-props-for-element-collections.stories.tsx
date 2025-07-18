@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react-vite'
 
 import * as SliderApplicationPlain from '@veavr/react-components/components/slider/application.plain.js'
 import * as SliderApplicationUniformOverride from '@veavr/react-components/components/slider/application.uniform-override.js'

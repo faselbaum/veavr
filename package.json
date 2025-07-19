@@ -10,7 +10,7 @@
     "ts-patch": "^3.2.1",
     "prettier": "^3.3.2",
     "eslint": "^9.6.0",
-    "wireit": "^0.14.7",
+    "wireit": "^0.14.12",
     "@changesets/cli": "^2.27.8",
     "tsx": "^4.19.1"
   },
